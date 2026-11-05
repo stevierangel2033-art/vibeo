@@ -92,8 +92,8 @@ input:focus,textarea:focus{border-color:#2b50ff}
       <div><label class="lbl" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="alex@company.com" required></div>
     </div>
     <div class="row">
+      <div><label class="lbl" for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(310) 555 0142" required></div>
       <div><label class="lbl" for="company">Company or brand <small>optional</small></label><input id="company" name="company" type="text" autocomplete="organization" placeholder="Rivera Studio"></div>
-      <div><label class="lbl" for="website">Current website <small>optional</small></label><input id="website" name="website" type="text" inputmode="url" placeholder="rivera.studio"></div>
     </div>
 
     <fieldset>
@@ -134,7 +134,10 @@ input:focus,textarea:focus{border-color:#2b50ff}
       <textarea id="about" name="about" placeholder="What are you launching, who is it for, and what should people feel when they land on it? Links to sites you love help a lot." required></textarea>
     </div>
 
-    <div><label class="lbl" for="source">How did you hear about us? <small>optional</small></label><input id="source" name="source" type="text" placeholder="Instagram, a friend, Google"></div>
+    <div class="row">
+      <div><label class="lbl" for="website">Current website <small>optional</small></label><input id="website" name="website" type="text" inputmode="url" placeholder="rivera.studio"></div>
+      <div><label class="lbl" for="source">How did you hear about us? <small>optional</small></label><input id="source" name="source" type="text" placeholder="Instagram, a friend, Google"></div>
+    </div>
 
     <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
 
@@ -196,6 +199,7 @@ input:focus,textarea:focus{border-color:#2b50ff}
     data.services = fd.getAll('services');
     if (!data.name.trim()) { err.textContent = 'Add your name.'; form.name.focus(); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) { err.textContent = 'Add a valid email address.'; form.email.focus(); return; }
+    if ((data.phone.match(/\d/g) || []).length < 7) { err.textContent = 'Add a phone number we can reach you on.'; form.phone.focus(); return; }
     if (data.about.trim().length < 10) { err.textContent = 'Tell us a little more about the project.'; form.about.focus(); return; }
 
     btn.disabled = true; btn.classList.add('busy'); sendText.textContent = 'Sending';

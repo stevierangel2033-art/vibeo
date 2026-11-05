@@ -50,7 +50,7 @@ main{padding:28px var(--pad) 80px;max-width:1200px}
 @media (max-width:760px){.item{grid-template-columns:1fr}}
 .who h2{font-size:24px;font-weight:700;line-height:1.2}
 .who .meta{color:var(--muted);font-size:14px;margin-top:4px}
-.who a.mail{display:inline-block;margin-top:10px;font-weight:500;border-bottom:1px solid #000;text-decoration:none;word-break:break-all}
+.who a.mail{display:table;margin-top:10px;font-weight:500;border-bottom:1px solid #000;text-decoration:none;word-break:break-all}
 .who .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
 .who .acts .btn{padding:9px 16px;font-size:14px}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -122,6 +122,7 @@ main{padding:28px var(--pad) 80px;max-width:1200px}
           <h2>${new Date(i.createdAt) > dayAgo ? '<span class="new" title="New in the last 24 hours"></span>' : ''}${esc(i.name)}</h2>
           <div class="meta">${esc(i.company || 'No company given')}<br>${when(i.createdAt)}</div>
           <a class="mail" href="mailto:${esc(i.email)}?subject=${encodeURIComponent('Your project with Vibeo')}">${esc(i.email)}</a>
+          ${i.phone ? `<a class="mail" href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}
           <div class="acts"><button class="btn ghost" data-del="${esc(i.pathname)}">Delete</button></div>
         </div>
         <div>
@@ -163,7 +164,7 @@ main{padding:28px var(--pad) 80px;max-width:1200px}
   });
 
   $('csv').addEventListener('click', () => {
-    const cols = ['createdAt','name','email','company','website','services','budget','timeline','about','source'];
+    const cols = ['createdAt','name','email','phone','company','website','services','budget','timeline','about','source'];
     const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
     const csv = [cols.join(','), ...items.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
     const a = document.createElement('a');

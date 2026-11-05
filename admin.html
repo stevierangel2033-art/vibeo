@@ -4,178 +4,545 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Admin | Vibeo</title>
+<title>Vibeo Mail</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Cpath d='M14 16h10l8 22 8-22h10L37 50H27z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Archivo:wdth,wght@62..125,500..900&display=swap" rel="stylesheet">
 <style>
-:root{--muted:#767676;--line:#e4e4e4;--pad:clamp(16px,3vw,48px)}
+:root{
+  --bg:#f6f8fc; --panel:#fff; --ink:#1f1f1f; --muted:#5e5e5e; --line:#e0e0e0;
+  --active:#d3e3fd; --hover:#e8ebf0; --compose:#c2e7ff; --blue:#0b57d0; --read:#f2f6fc; --search:#eaf1fb; --star:#f4b400;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#fff;color:#000;font-family:'Archivo',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
-a{color:inherit}
-button{font:inherit;cursor:pointer}
-:focus-visible{outline:2px solid #2b50ff;outline-offset:3px}
-.disp{font-stretch:125%;font-weight:900;letter-spacing:-.03em;line-height:.95}
-.serif{font-family:'Newsreader',Georgia,serif}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:Roboto,'Helvetica Neue',Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+svg.i{width:20px;height:20px;fill:currentColor;flex:none}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#444746}
+.icon-btn:hover{background:rgba(68,71,70,.08)}
+[hidden]{display:none!important}
 
-.login{min-height:100svh;display:grid;place-items:center;padding:var(--pad)}
-.login form{width:min(420px,100%)}
-.login h1{font-size:clamp(44px,8vw,72px)}
-.login p{color:var(--muted);margin:10px 0 28px}
-.login input{width:100%;font:inherit;font-size:20px;border:0;border-bottom:1.5px solid #000;padding:10px 0;outline:none;border-radius:0}
-.login input:focus{border-color:#2b50ff}
-.btn{display:inline-flex;align-items:center;gap:10px;background:#000;color:#fff;border:0;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px}
-.btn.ghost{background:transparent;color:#000;border:1.5px solid #000}
-.login .btn{margin-top:24px}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.err{color:#d1003f;font-size:14px;margin-top:14px;min-height:1.2em}
+/* Login */
+.login{min-height:100%;display:grid;place-items:center;padding:24px;background:#fff}
+.login form{width:min(400px,100%);border:1px solid #dadce0;border-radius:28px;padding:40px 36px}
+.login .brand{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;font-size:28px;letter-spacing:-.03em}
+.login h1{font-size:24px;font-weight:400;margin:18px 0 6px}
+.login p{color:var(--muted);margin-bottom:24px}
+.login input{width:100%;border:1px solid #747775;border-radius:4px;padding:14px 14px;font-size:16px;outline:none}
+.login input:focus{border:2px solid var(--blue);padding:13px}
+.login .lrow{display:flex;justify-content:flex-end;margin-top:28px}
+.pill{background:var(--blue);color:#fff;border-radius:999px;padding:10px 24px;font-weight:500}
+.pill:hover{box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.pill[disabled]{opacity:.6;cursor:progress}
+.err{color:#b3261e;font-size:13px;margin-top:12px;min-height:1em}
 
-.app{display:none}
-.app.show{display:block}
-header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:16px var(--pad);display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
-header .logo{font-stretch:125%;font-weight:900;font-size:20px;letter-spacing:-.03em;text-decoration:none}
-header .logo span{font-weight:400;font-stretch:100%;color:var(--muted);font-size:15px;margin-left:8px;letter-spacing:0}
-.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.tools input{font:inherit;border:1.5px solid #000;border-radius:999px;padding:10px 16px;width:min(260px,60vw);outline:none}
-.tools input:focus{border-color:#2b50ff}
+/* App shell */
+.app{height:100%;display:grid;grid-template-columns:256px minmax(0,1fr);grid-template-rows:64px 1fr}
+.top{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:8px 16px 8px 8px}
+.brand{display:flex;align-items:center;gap:10px;min-width:220px;padding-left:4px;text-decoration:none;color:inherit}
+.brand b{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;font-size:22px;letter-spacing:-.03em;color:#000}
+.brand span{font-size:20px;color:#444746}
+.search{flex:1;min-width:0;max-width:720px;display:flex;align-items:center;gap:6px;background:var(--search);border-radius:24px;height:48px;padding:0 8px}
+.search:focus-within{background:#fff;box-shadow:0 1px 3px rgba(32,33,36,.28)}
+.search input{flex:1;border:0;background:transparent;outline:none;font-size:16px;height:100%}
+.top .right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.avatar{width:32px;height:32px;border-radius:50%;background:#000;color:#fff;display:grid;place-items:center;font-family:'Archivo',sans-serif;font-weight:800;font-size:14px}
 
-main{padding:28px var(--pad) 80px;max-width:1200px}
-.summary{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
-.summary h1{font-size:clamp(36px,5vw,56px)}
-.summary span{color:var(--muted)}
-.empty{padding:60px 0;color:var(--muted);font-size:18px}
+.side{padding:8px 16px 16px 0;overflow:auto}
+.compose-btn{display:inline-flex;align-items:center;gap:12px;background:var(--compose);border-radius:16px;height:56px;padding:0 24px 0 18px;margin:0 0 16px 8px;font-weight:500;font-size:14px;color:#001d35;box-shadow:none;transition:box-shadow .2s}
+.compose-btn:hover{box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.nav a{display:flex;align-items:center;gap:18px;height:32px;padding:0 12px 0 26px;border-radius:0 16px 16px 0;color:#202124;text-decoration:none;font-size:14px;cursor:pointer}
+.nav a:hover{background:var(--hover)}
+.nav a.on{background:var(--active);font-weight:700;color:#001d35}
+.nav a .n{margin-left:auto;font-size:12px;font-weight:700}
+.nav .sep{height:1px;margin:10px 0 10px 26px;background:transparent}
+.nav .lbl{padding:4px 26px;font-size:14px;color:#202124;font-weight:500;margin-top:6px}
 
-.item{border-top:1.5px solid #000;padding:22px 0 26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:18px 40px}
-@media (max-width:760px){.item{grid-template-columns:1fr}}
-.who h2{font-size:24px;font-weight:700;line-height:1.2}
-.who .meta{color:var(--muted);font-size:14px;margin-top:4px}
-.who a.mail{display:table;margin-top:10px;font-weight:500;border-bottom:1px solid #000;text-decoration:none;word-break:break-all}
-.who .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
-.who .acts .btn{padding:9px 16px;font-size:14px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.tag{border:1.5px solid #000;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:500}
-.tag.solid{background:#000;color:#fff}
-.about{font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:14px;font-size:14px}
-.kv dt{color:var(--muted)}
-.kv dd{word-break:break-word}
-.new{display:inline-block;width:8px;height:8px;border-radius:50%;background:conic-gradient(#2b50ff,#ff2d87,#ffd200,#00d2b4,#2b50ff);margin-right:8px;vertical-align:middle}
+.panel{background:var(--panel);border-radius:16px;margin:0 16px 16px 0;display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.toolbar{display:flex;align-items:center;gap:4px;height:48px;padding:0 8px 0 12px;border-bottom:1px solid #f1f3f4;flex:none}
+.toolbar .meta{margin-left:auto;color:var(--muted);font-size:12px;padding-right:8px}
+.scroll{flex:1;overflow:auto}
+
+/* List */
+.row{display:grid;grid-template-columns:40px 200px minmax(0,1fr) auto;align-items:center;height:40px;padding:0 16px 0 8px;border-bottom:1px solid #f1f3f4;cursor:pointer;background:var(--read);position:relative}
+.row.unread{background:#fff;font-weight:700}
+.row:hover{box-shadow:inset 1px 0 0 #dadce0,inset -1px 0 0 #dadce0,0 1px 2px 0 rgba(60,64,67,.3),0 1px 3px 1px rgba(60,64,67,.15);z-index:1}
+.row .star{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;color:#c4c7c5}
+.row .star.on{color:var(--star)}
+.row .who{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:12px}
+.row .who small{font-weight:400;color:var(--muted);margin-left:4px}
+.row .subj{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#202124}
+.row .subj .snip{font-weight:400;color:var(--muted)}
+.row .subj .clip{display:inline-flex;vertical-align:middle;margin-left:6px;color:var(--muted)}
+.row .when{font-size:12px;padding-left:16px;white-space:nowrap}
+.row.unread .when{color:#202124}
+.row:not(.unread) .when{font-weight:400;color:var(--muted)}
+.tag{display:inline-block;background:#e8eaed;color:#444;border-radius:4px;font-size:12px;font-weight:500;padding:1px 6px;margin-right:6px}
+.empty{padding:64px 24px;text-align:center;color:var(--muted)}
+.empty b{display:block;font-size:20px;font-weight:400;color:#202124;margin-bottom:6px}
+.banner{margin:12px 16px;padding:12px 16px;border-radius:8px;background:#fef7e0;color:#5f4b00;font-size:13px}
+
+/* Thread */
+.thread{padding:12px 24px 48px 72px;max-width:1100px}
+.thread h1{font-size:22px;font-weight:400;line-height:1.3;margin:8px 0 18px -16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.msg{position:relative;padding:12px 0 18px;border-bottom:1px solid #f1f3f4}
+.msg .av{position:absolute;left:-56px;top:16px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:500;font-size:18px}
+.msg .hd{display:flex;align-items:flex-start;gap:8px}
+.msg .hd .nm{font-weight:700}
+.msg .hd .em{color:var(--muted);font-size:12px}
+.msg .hd .to{color:var(--muted);font-size:12px;margin-top:2px}
+.msg .hd .dt{margin-left:auto;color:var(--muted);font-size:12px;white-space:nowrap;display:flex;align-items:center;gap:2px}
+.msg .body{margin-top:14px;font-size:14px;line-height:1.55;white-space:pre-wrap;word-wrap:break-word}
+.msg iframe{width:100%;border:0;margin-top:12px;min-height:60px;display:block}
+.msg.collapsed .body,.msg.collapsed iframe,.msg.collapsed .atts{display:none}
+.msg.collapsed .hd .to{display:none}
+.msg.collapsed .snip{display:block}
+.msg .snip{display:none;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70ch}
+.msg.collapsed{cursor:pointer}
+.atts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.att{display:flex;align-items:center;gap:8px;border:1px solid #dadce0;border-radius:8px;padding:8px 12px;max-width:260px}
+.att:hover{background:#f6f8fc}
+.att span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.att small{color:var(--muted);flex:none}
+.reply-actions{display:flex;gap:12px;margin-top:20px}
+.outline{display:inline-flex;align-items:center;gap:8px;border:1px solid #747775;border-radius:999px;padding:8px 22px 8px 16px;font-weight:500;color:#444746}
+.outline:hover{background:#f6f8fc}
+.reply-box{margin-top:20px;border-radius:12px;box-shadow:0 1px 2px 0 rgba(60,64,67,.3),0 2px 6px 2px rgba(60,64,67,.15);padding:12px 16px}
+.reply-box .to{display:flex;align-items:center;gap:8px;color:var(--muted);padding-bottom:8px;border-bottom:1px solid #f1f3f4}
+.reply-box .to input{flex:1;border:0;outline:none;color:#202124}
+.reply-box textarea{width:100%;min-height:140px;border:0;outline:none;resize:vertical;margin-top:10px;line-height:1.5}
+.reply-box .ft{display:flex;align-items:center;gap:12px;margin-top:8px}
+.reply-box .ft .err{margin:0}
+
+/* Briefs */
+.briefs{padding:8px 24px 48px}
+.brief{display:grid;grid-template-columns:260px 1fr;gap:16px 32px;padding:20px 0;border-bottom:1px solid #f1f3f4}
+@media (max-width:860px){.brief{grid-template-columns:1fr}}
+.brief h3{font-size:16px;font-weight:700}
+.brief .m{color:var(--muted);font-size:13px;margin-top:2px}
+.brief a{color:var(--blue);text-decoration:none}
+.brief .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{border:1px solid #c4c7c5;border-radius:8px;padding:3px 10px;font-size:12px;font-weight:500}
+.chip.dark{background:#d3e3fd;border-color:#d3e3fd;color:#001d35}
+.brief .about{white-space:pre-wrap;line-height:1.55}
+.brief dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin-top:10px;font-size:13px}
+.brief dt{color:var(--muted)}
+
+/* Compose window */
+.composer{position:fixed;right:24px;bottom:0;width:min(560px,calc(100vw - 16px));background:#fff;border-radius:12px 12px 0 0;box-shadow:0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12),0 5px 5px -3px rgba(0,0,0,.2);z-index:50;display:flex;flex-direction:column;max-height:calc(100vh - 80px)}
+.composer .hd{display:flex;align-items:center;background:#f2f6fc;border-radius:12px 12px 0 0;padding:4px 4px 4px 16px;font-weight:500;cursor:pointer}
+.composer .hd .icon-btn{width:32px;height:32px}
+.composer .hd span{flex:1}
+.composer .f{display:flex;align-items:center;gap:8px;border-bottom:1px solid #f1f3f4;margin:0 16px;padding:8px 0;color:var(--muted)}
+.composer .f input{flex:1;border:0;outline:none;color:#202124}
+.composer textarea{flex:1;min-height:280px;border:0;outline:none;resize:none;padding:12px 16px;line-height:1.5}
+.composer .ft{display:flex;align-items:center;gap:12px;padding:8px 16px 14px}
+.composer.min textarea,.composer.min .f,.composer.min .ft{display:none}
+.composer.min{width:280px}
+
+.toast{position:fixed;left:24px;bottom:24px;background:#323232;color:#fff;border-radius:4px;padding:14px 20px;box-shadow:0 3px 5px rgba(0,0,0,.2);z-index:60;font-size:14px;opacity:0;transform:translateY(10px);transition:all .2s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;left:0;top:64px;bottom:0;width:256px;background:var(--bg);z-index:40;transform:translateX(-100%);transition:transform .2s}
+  .app.nav-open .side{box-shadow:2px 0 8px rgba(0,0,0,.15)}
+  .app.nav-open .side{transform:none}
+  .panel{margin:0 8px 8px}
+  .brand{min-width:0}
+  .brand span{display:none}
+  .top{padding:8px 8px 8px 4px;gap:4px}
+  .brand b{font-size:18px}
+  .top .right .avatar{display:none}
+  .row{grid-template-columns:36px minmax(0,1fr) auto;height:auto;padding:10px 12px 10px 4px;grid-template-areas:"s w d" "s j j"}
+  .row .star{grid-area:s}.row .who{grid-area:w}.row .when{grid-area:d}.row .subj{grid-area:j}
+  .thread{padding:8px 16px 40px 16px}
+  .thread h1{margin-left:0}
+  .msg .av{position:static;width:32px;height:32px;font-size:15px;margin-right:8px}
+  .msg .hd{align-items:center}
+  .composer{right:8px}
+}
 </style>
 </head>
 <body>
 
 <section class="login" id="login">
   <form id="loginForm">
-    <h1 class="disp">Vibeo admin</h1>
-    <p class="serif">Enter the admin password to see project briefs.</p>
-    <label for="pw" class="sr">Password</label>
-    <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required>
-    <button class="btn" type="submit" id="loginBtn">Open submissions</button>
+    <div class="brand">Vibeo</div>
+    <h1>Sign in to Vibeo Mail</h1>
+    <p>Enter the admin password to open the inbox and project briefs.</p>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
     <p class="err" id="loginErr" role="alert"></p>
+    <div class="lrow"><button class="pill" type="submit" id="loginBtn">Next</button></div>
   </form>
 </section>
 
-<section class="app" id="app">
-  <header>
-    <a class="logo" href="/">Vibeo<span>Admin</span></a>
-    <div class="tools">
-      <input id="q" type="search" placeholder="Search briefs" aria-label="Search briefs">
-      <button class="btn ghost" id="refresh">Refresh</button>
-      <button class="btn ghost" id="csv">Export CSV</button>
-      <button class="btn" id="logout">Sign out</button>
+<div class="app" id="app" hidden>
+  <header class="top">
+    <button class="icon-btn" id="menu" aria-label="Main menu"><svg class="i" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
+    <a class="brand" href="/"><b>Vibeo</b><span>Mail</span></a>
+    <label class="search">
+      <span class="icon-btn" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg></span>
+      <input id="q" type="search" placeholder="Search mail" aria-label="Search mail">
+    </label>
+    <div class="right">
+      <button class="icon-btn" id="logout" title="Sign out" aria-label="Sign out"><svg class="i" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></button>
+      <div class="avatar" title="hello@vibeo.ink">V</div>
     </div>
   </header>
-  <main>
-    <div class="summary"><h1 class="disp" id="count">0 briefs</h1><span id="updated"></span></div>
-    <div id="list"></div>
-  </main>
-</section>
+
+  <aside class="side">
+    <button class="compose-btn" id="composeBtn"><svg class="i" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Compose</button>
+    <nav class="nav" id="nav">
+      <a data-f="inbox" class="on"><svg class="i" viewBox="0 0 24 24"><path d="M19 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V5a2 2 0 00-2-2zm0 12h-4c0 1.66-1.35 3-3 3s-3-1.34-3-3H5V5h14v10z"/></svg>Inbox<span class="n" id="nInbox"></span></a>
+      <a data-f="starred"><svg class="i" viewBox="0 0 24 24"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>Starred</a>
+      <a data-f="sent"><svg class="i" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>Sent</a>
+      <a data-f="trash"><svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>Trash</a>
+      <div class="lbl">Website</div>
+      <a data-f="briefs"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Project briefs<span class="n" id="nBriefs"></span></a>
+    </nav>
+  </aside>
+
+  <section class="panel">
+    <div class="toolbar" id="toolbar"></div>
+    <div class="scroll" id="main"></div>
+  </section>
+</div>
+
+<div class="composer" id="composer" hidden>
+  <div class="hd" id="cHead"><span id="cTitle">New Message</span>
+    <button class="icon-btn" id="cMin" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg></button>
+    <button class="icon-btn" id="cClose" aria-label="Close"><svg class="i" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+  </div>
+  <label class="f">To<input id="cTo" type="text" autocomplete="off"></label>
+  <label class="f">Subject<input id="cSubj" type="text" autocomplete="off"></label>
+  <textarea id="cBody" aria-label="Message"></textarea>
+  <div class="ft"><button class="pill" id="cSend">Send</button><span class="err" id="cErr"></span></div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
 
 <script>
 (() => {
   const KEY = 'vibeo_admin_pw';
-  let pw = '';
-  try { pw = sessionStorage.getItem(KEY) || ''; } catch {}
-  let items = [];
+  let pw = ''; try { pw = sessionStorage.getItem(KEY) || ''; } catch {}
+  let mail = [], briefs = [], canSend = true, folder = 'inbox', openThread = null;
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const when = iso => { const d = new Date(iso); return d.toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'}); };
+  const ICON = {
+    back:'<path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>',
+    refresh:'<path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>',
+    trash:'<path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>',
+    unread:'<path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>',
+    restore:'<path d="M13 3a9 9 0 00-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0013 21a9 9 0 000-18z"/>',
+    star:'<path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/>',
+    starOn:'<path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>',
+    reply:'<path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/>',
+    clip:'<path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5a2.5 2.5 0 015 0v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5a2.5 2.5 0 005 0V5c0-2.21-1.79-4-4-4S7 2.79 7 5v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"/>',
+    mail:'<path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>'
+  };
+  const ic = (n, s = 20) => `<svg class="i" style="width:${s}px;height:${s}px" viewBox="0 0 24 24">${ICON[n]}</svg>`;
+  const toast = msg => { const t = $('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('show'), 3000); };
 
-  async function load(){
-    const r = await fetch('/api/submissions', { headers: { Authorization: 'Bearer ' + pw }, cache: 'no-store' });
+  async function api(path, opts = {}){
+    const r = await fetch(path, { ...opts, cache:'no-store', headers:{ Authorization:'Bearer ' + pw, ...(opts.body ? {'Content-Type':'application/json'} : {}), ...(opts.headers || {}) } });
     const out = await r.json().catch(() => ({}));
-    if (!r.ok) throw Object.assign(new Error(out.error || 'Could not load submissions.'), { status: r.status });
-    items = out.items || [];
-    $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+    if (!r.ok) throw Object.assign(new Error(out.error || 'Something went wrong.'), { status:r.status });
+    return out;
+  }
+
+  /* Formatting */
+  const colors = ['#1a73e8','#d93025','#188038','#e37400','#9334e6','#007b83','#c5221f','#b06000'];
+  const color = s => colors[[...String(s)].reduce((a,c) => a + c.charCodeAt(0), 0) % colors.length];
+  const nameOf = m => m.folder === 'sent' || (m.trashedFrom === 'sent') ? 'me' : (m.fromName || m.from.split('@')[0]);
+  const isMine = m => m.folder === 'sent' || m.trashedFrom === 'sent';
+  function short(iso){
+    const d = new Date(iso), now = new Date();
+    if (d.toDateString() === now.toDateString()) return d.toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+    if (d.getFullYear() === now.getFullYear()) return d.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+    return d.toLocaleDateString(undefined, {month:'numeric', day:'numeric', year:'2-digit'});
+  }
+  const long = iso => new Date(iso).toLocaleString(undefined, {weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'});
+  const plain = m => (m.text || String(m.html || '').replace(/<style[\s\S]*?<\/style>/gi,'').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ')).replace(/\s+/g,' ').trim();
+  const size = n => n > 1e6 ? (n/1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(n/1e3)) + ' KB';
+
+  /* Threads */
+  function threads(){
+    const map = new Map();
+    for (const m of mail){ const k = m.thread || m.id; if (!map.has(k)) map.set(k, []); map.get(k).push(m); }
+    return [...map.entries()].map(([key, msgs]) => {
+      msgs.sort((a,b) => a.date < b.date ? -1 : 1);
+      return { key, msgs, last: msgs[msgs.length - 1] };
+    }).sort((a,b) => a.last.date < b.last.date ? 1 : -1);
+  }
+  function inFolder(t, f){
+    const live = t.msgs.filter(m => m.folder !== 'trash');
+    if (f === 'trash') return t.msgs.some(m => m.folder === 'trash');
+    if (f === 'inbox') return live.some(m => m.folder === 'inbox');
+    if (f === 'sent') return live.some(m => m.folder === 'sent');
+    if (f === 'starred') return live.some(m => m.starred);
+    return false;
+  }
+  const visibleMsgs = (t, f) => f === 'trash' ? t.msgs.filter(m => m.folder === 'trash') : t.msgs.filter(m => m.folder !== 'trash');
+
+  function counts(){
+    const unread = threads().filter(t => t.msgs.some(m => m.folder === 'inbox' && !m.read)).length;
+    $('nInbox').textContent = unread || '';
+    $('nBriefs').textContent = briefs.length || '';
+    document.title = unread ? `Inbox (${unread}) | Vibeo Mail` : 'Vibeo Mail';
+  }
+
+  /* Rendering */
+  function setFolder(f){
+    folder = f; openThread = null;
+    document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.f === f));
+    $('app').classList.remove('nav-open');
     render();
   }
 
   function render(){
+    counts();
+    if (folder === 'briefs') return renderBriefs();
+    if (openThread) return renderThread();
     const q = $('q').value.trim().toLowerCase();
-    const shown = q ? items.filter(i => JSON.stringify(i).toLowerCase().includes(q)) : items;
-    $('count').textContent = `${shown.length} brief${shown.length === 1 ? '' : 's'}`;
-    const dayAgo = Date.now() - 864e5;
-    $('list').innerHTML = shown.length ? shown.map(i => `
-      <article class="item">
-        <div class="who">
-          <h2>${new Date(i.createdAt) > dayAgo ? '<span class="new" title="New in the last 24 hours"></span>' : ''}${esc(i.name)}</h2>
-          <div class="meta">${esc(i.company || 'No company given')}<br>${when(i.createdAt)}</div>
-          <a class="mail" href="mailto:${esc(i.email)}?subject=${encodeURIComponent('Your project with Vibeo')}">${esc(i.email)}</a>
-          ${i.phone ? `<a class="mail" href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}
-          <div class="acts"><button class="btn ghost" data-del="${esc(i.pathname)}">Delete</button></div>
-        </div>
-        <div>
-          <div class="tags">
-            ${(i.services || []).map(s => `<span class="tag solid">${esc(s)}</span>`).join('')}
-            ${i.budget ? `<span class="tag">${esc(i.budget)}</span>` : ''}
-            ${i.timeline ? `<span class="tag">${esc(i.timeline)}</span>` : ''}
-          </div>
-          <p class="about">${esc(i.about)}</p>
-          <dl class="kv">
-            ${i.website ? `<dt>Website</dt><dd><a href="${esc(/^https?:/i.test(i.website) ? i.website : 'https://' + i.website)}" target="_blank" rel="noopener noreferrer">${esc(i.website)}</a></dd>` : ''}
-            ${i.source ? `<dt>Heard from</dt><dd>${esc(i.source)}</dd>` : ''}
-          </dl>
-        </div>
-      </article>`).join('') : `<p class="empty serif">${q ? 'No briefs match that search.' : 'No briefs yet. They will show up here as soon as someone sends the form on /start.'}</p>`;
+    let list = threads().filter(t => inFolder(t, folder));
+    if (q) list = list.filter(t => t.msgs.some(m => [m.from, m.fromName, m.to, m.subject, plain(m)].join(' ').toLowerCase().includes(q)));
+    $('toolbar').innerHTML = `<button class="icon-btn" data-act="refresh" title="Refresh">${ic('refresh')}</button><span class="meta">${list.length ? `1 to ${list.length} of ${list.length}` : ''}</span>`;
+    const banner = !canSend ? `<div class="banner">Replies are off until SENDGRID_API_KEY is added in Vercel. Incoming mail still arrives here.</div>` : '';
+    if (!list.length){
+      const msg = { inbox:['Your inbox is empty','Mail sent to hello@vibeo.ink shows up here.'], starred:['No starred messages','Star a message to find it here later.'], sent:['Nothing sent yet','Replies you send from here show up in this folder.'], trash:['Trash is empty','Deleted messages land here.'] }[folder];
+      $('main').innerHTML = banner + `<div class="empty"><b>${q ? 'No messages match your search' : msg[0]}</b>${q ? '' : msg[1]}</div>`;
+      return;
+    }
+    $('main').innerHTML = banner + list.map(t => {
+      const vis = visibleMsgs(t, folder), last = vis[vis.length - 1] || t.last;
+      const unread = t.msgs.some(m => m.folder === 'inbox' && !m.read);
+      const people = [...new Set(vis.map(nameOf))];
+      const starred = vis.some(m => m.starred);
+      const hasAtt = vis.some(m => (m.attachments || []).length);
+      const who = folder === 'sent' ? 'To: ' + esc(last.to.split(',')[0]) : esc(people.slice(-3).join(', '));
+      return `<div class="row ${unread ? 'unread' : ''}" data-t="${esc(t.key)}" tabindex="0">
+        <button class="star ${starred ? 'on' : ''}" data-star="${esc(t.key)}" aria-label="${starred ? 'Unstar' : 'Star'}">${ic(starred ? 'starOn' : 'star')}</button>
+        <div class="who">${who}${vis.length > 1 ? `<small>${vis.length}</small>` : ''}</div>
+        <div class="subj">${esc(last.subject)}<span class="snip"> - ${esc(plain(last).slice(0, 160))}</span>${hasAtt ? `<span class="clip">${ic('clip',16)}</span>` : ''}</div>
+        <div class="when">${short(last.date)}</div>
+      </div>`;
+    }).join('');
   }
 
-  function showApp(){ $('login').style.display = 'none'; $('app').classList.add('show'); }
-  function showLogin(msg){ $('app').classList.remove('show'); $('login').style.display = ''; $('loginErr').textContent = msg || ''; $('pw').focus(); }
+  function renderThread(){
+    const t = threads().find(x => x.key === openThread);
+    if (!t){ openThread = null; return render(); }
+    const msgs = visibleMsgs(t, folder);
+    const inTrash = folder === 'trash';
+    $('toolbar').innerHTML = `
+      <button class="icon-btn" data-act="back" title="Back">${ic('back')}</button>
+      ${inTrash
+        ? `<button class="icon-btn" data-act="restore" title="Move back">${ic('restore')}</button><button class="icon-btn" data-act="purge" title="Delete forever">${ic('trash')}</button>`
+        : `<button class="icon-btn" data-act="trash" title="Delete">${ic('trash')}</button><button class="icon-btn" data-act="unread" title="Mark as unread">${ic('unread')}</button>`}
+      <span class="meta"></span>`;
+    const lastIn = [...msgs].reverse().find(m => !isMine(m));
+    const replyTo = lastIn ? lastIn.from : (msgs[msgs.length - 1].to || '').split(',')[0].trim();
+    $('main').innerHTML = `<div class="thread">
+      <h1>${esc(msgs[msgs.length - 1].subject)} ${msgs.some(m => m.folder === 'inbox' || m.trashedFrom === 'inbox') ? '<span class="tag">Inbox</span>' : ''}</h1>
+      ${msgs.map((m, i) => {
+        const collapsed = i < msgs.length - 1 && msgs.length > 2;
+        const nm = isMine(m) ? 'Vibeo' : (m.fromName || m.from);
+        return `<div class="msg ${collapsed ? 'collapsed' : ''}" data-m="${esc(m.pathname)}">
+          <div class="hd">
+            <div class="av" style="background:${isMine(m) ? '#000' : color(m.from)}">${esc(nm.trim()[0] || '?').toUpperCase()}</div>
+            <div style="min-width:0">
+              <span class="nm">${esc(nm)}</span> <span class="em">&lt;${esc(m.from)}&gt;</span>
+              <div class="to">to ${esc(isMine(m) ? m.to : 'me')}</div>
+              <div class="snip">${esc(plain(m).slice(0, 140))}</div>
+            </div>
+            <div class="dt">${long(m.date)}<button class="icon-btn" data-mstar="${esc(m.pathname)}" style="color:${m.starred ? 'var(--star)' : '#444746'}" aria-label="Star">${ic(m.starred ? 'starOn' : 'star')}</button></div>
+          </div>
+          ${m.html ? `<iframe sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" data-html="${i}"></iframe>` : `<div class="body">${esc(m.text)}</div>`}
+          ${(m.attachments || []).length ? `<div class="atts">${m.attachments.map(a => `<button class="att" data-att="${esc(a.pathname)}" data-name="${esc(a.name)}">${ic('clip',18)}<span>${esc(a.name)}</span><small>${size(a.size)}</small></button>`).join('')}</div>` : ''}
+        </div>`;
+      }).join('')}
+      <div class="reply-actions" id="replyActions"><button class="outline" data-act="reply">${ic('reply')}Reply</button></div>
+      <div class="reply-box" id="replyBox" hidden>
+        <div class="to">${ic('reply',18)}<input id="rTo" value="${esc(replyTo)}" aria-label="To"></div>
+        <textarea id="rBody" aria-label="Reply"></textarea>
+        <div class="ft"><button class="pill" id="rSend">Send</button><button class="icon-btn" data-act="discard" title="Discard">${ic('trash')}</button><span class="err" id="rErr"></span></div>
+      </div>
+    </div>`;
+    // Render HTML bodies safely inside sandboxed frames
+    $('main').querySelectorAll('iframe[data-html]').forEach(f => {
+      const m = msgs[+f.dataset.html];
+      f.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base target="_blank"><style>body{margin:0;font:14px/1.55 Roboto,Arial,sans-serif;color:#222;word-wrap:break-word}img{max-width:100%;height:auto}blockquote{margin:0 0 0 .8ex;border-left:1px solid #ccc;padding-left:1ex}</style></head><body>${m.html}</body></html>`;
+      f.onload = () => { try { f.style.height = (f.contentDocument.documentElement.scrollHeight + 8) + 'px'; } catch {} };
+    });
+    // Mark read
+    const unread = msgs.filter(m => m.folder === 'inbox' && !m.read);
+    if (unread.length){
+      unread.forEach(m => m.read = true); counts();
+      api('/api/mail', { method:'PATCH', body: JSON.stringify({ pathnames: unread.map(m => m.pathname), read:true }) }).catch(() => {});
+    }
+  }
+
+  function renderBriefs(){
+    const q = $('q').value.trim().toLowerCase();
+    const list = q ? briefs.filter(b => JSON.stringify(b).toLowerCase().includes(q)) : briefs;
+    $('toolbar').innerHTML = `<button class="icon-btn" data-act="refresh" title="Refresh">${ic('refresh')}</button><button class="icon-btn" data-act="csv" title="Export CSV"><svg class="i" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></button><span class="meta">${list.length} brief${list.length === 1 ? '' : 's'}</span>`;
+    if (!list.length){ $('main').innerHTML = `<div class="empty"><b>${q ? 'No briefs match your search' : 'No project briefs yet'}</b>${q ? '' : 'Briefs sent from vibeo.ink/start show up here.'}</div>`; return; }
+    $('main').innerHTML = `<div class="briefs">${list.map(i => `
+      <article class="brief">
+        <div>
+          <h3>${esc(i.name)}</h3>
+          <div class="m">${esc(i.company || 'No company given')}<br>${long(i.createdAt)}</div>
+          <div class="m" style="margin-top:8px"><a href="mailto:${esc(i.email)}">${esc(i.email)}</a>${i.phone ? `<br><a href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}</div>
+          <div class="acts">
+            <button class="outline" data-breply="${esc(i.pathname)}">${ic('reply',18)}Reply</button>
+            <button class="outline" data-bdel="${esc(i.pathname)}">Delete</button>
+          </div>
+        </div>
+        <div>
+          <div class="chips">${(i.services || []).map(s => `<span class="chip dark">${esc(s)}</span>`).join('')}${i.budget ? `<span class="chip">${esc(i.budget)}</span>` : ''}${i.timeline ? `<span class="chip">${esc(i.timeline)}</span>` : ''}</div>
+          <p class="about">${esc(i.about)}</p>
+          <dl>${i.website ? `<dt>Website</dt><dd><a href="${esc(/^https?:/i.test(i.website) ? i.website : 'https://' + i.website)}" target="_blank" rel="noopener noreferrer">${esc(i.website)}</a></dd>` : ''}${i.source ? `<dt>Heard from</dt><dd>${esc(i.source)}</dd>` : ''}</dl>
+        </div>
+      </article>`).join('')}</div>`;
+  }
+
+  /* Data */
+  async function loadAll(){
+    const [m, b] = await Promise.all([api('/api/mail'), api('/api/submissions')]);
+    mail = m.items || []; canSend = m.canSend !== false; briefs = b.items || [];
+    render();
+  }
+
+  async function patch(msgs, body, note){
+    const pathnames = msgs.map(m => m.pathname);
+    const out = await api('/api/mail', { method:'PATCH', body: JSON.stringify({ pathnames, ...body }) });
+    for (const u of out.items || []){ const i = mail.findIndex(m => m.pathname === u.pathname); if (i > -1) mail[i] = u; }
+    if (note) toast(note);
+    render();
+  }
+
+  async function send({ to, subject, text, replyTo }){
+    const out = await api('/api/mail', { method:'POST', body: JSON.stringify({ to, subject, text, replyTo }) });
+    if (out.item) mail.unshift(out.item);
+    toast('Message sent');
+    render();
+  }
+
+  /* Events */
+  $('nav').addEventListener('click', e => { const a = e.target.closest('a[data-f]'); if (a) setFolder(a.dataset.f); });
+  $('menu').addEventListener('click', () => $('app').classList.toggle('nav-open'));
+  $('q').addEventListener('input', () => { openThread = null; render(); });
+
+  $('toolbar').addEventListener('click', async e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const t = openThread && threads().find(x => x.key === openThread);
+    const msgs = t ? visibleMsgs(t, folder) : [];
+    try {
+      switch (b.dataset.act){
+        case 'refresh': await loadAll(); toast('Up to date'); break;
+        case 'back': openThread = null; render(); break;
+        case 'trash': openThread = null; await patch(msgs, { trash:true }, 'Conversation moved to Trash'); break;
+        case 'restore': openThread = null; await patch(msgs, { trash:false }, 'Conversation moved back'); break;
+        case 'unread': { const inb = msgs.filter(m => m.folder === 'inbox'); openThread = null; if (inb.length) await patch([inb[inb.length - 1]], { read:false }, 'Marked as unread'); else render(); break; }
+        case 'purge':
+          if (b.dataset.confirm !== '1'){ b.dataset.confirm = '1'; b.style.color = '#b3261e'; toast('Click delete again to remove forever'); setTimeout(() => { b.dataset.confirm = ''; b.style.color = ''; }, 3000); return; }
+          await api('/api/mail', { method:'DELETE', body: JSON.stringify({ pathnames: msgs.map(m => m.pathname) }) });
+          mail = mail.filter(m => !msgs.includes(m)); openThread = null; toast('Deleted forever'); render(); break;
+        case 'csv': exportCsv(); break;
+      }
+    } catch (ex) { handle(ex); }
+  });
+
+  $('main').addEventListener('click', async e => {
+    const star = e.target.closest('[data-star]');
+    if (star){ e.stopPropagation(); const t = threads().find(x => x.key === star.dataset.star); const vis = visibleMsgs(t, folder); const on = !vis.some(m => m.starred); try { await patch(on ? [vis[vis.length - 1]] : vis.filter(m => m.starred), { starred:on }); } catch (ex) { handle(ex); } return; }
+    const mstar = e.target.closest('[data-mstar]');
+    if (mstar){ const m = mail.find(x => x.pathname === mstar.dataset.mstar); try { await patch([m], { starred:!m.starred }); } catch (ex) { handle(ex); } return; }
+    const row = e.target.closest('.row[data-t]');
+    if (row){ openThread = row.dataset.t; render(); $('main').scrollTop = 0; return; }
+    const col = e.target.closest('.msg.collapsed');
+    if (col){ col.classList.remove('collapsed'); return; }
+    const att = e.target.closest('[data-att]');
+    if (att){ download(att.dataset.att, att.dataset.name); return; }
+    const act = e.target.closest('[data-act]');
+    if (act?.dataset.act === 'reply'){ $('replyActions').hidden = true; $('replyBox').hidden = false; $('rBody').focus(); $('replyBox').scrollIntoView({block:'nearest'}); return; }
+    if (act?.dataset.act === 'discard'){ $('replyBox').hidden = true; $('replyActions').hidden = false; $('rBody').value = ''; return; }
+    if (e.target.closest('#rSend')){
+      const t = threads().find(x => x.key === openThread); const msgs = visibleMsgs(t, folder);
+      const parent = [...msgs].reverse().find(m => !isMine(m)) || msgs[msgs.length - 1];
+      const btn = $('rSend'); btn.disabled = true; $('rErr').textContent = '';
+      try {
+        const subj = parent.subject.match(/^\s*re:/i) ? parent.subject : 'Re: ' + parent.subject;
+        await send({ to: $('rTo').value, subject: subj, text: $('rBody').value, replyTo: parent.pathname });
+      } catch (ex) { if (ex.status === 401) return handle(ex); $('rErr').textContent = ex.message; btn.disabled = false; }
+      return;
+    }
+    const br = e.target.closest('[data-breply]');
+    if (br){ const b = briefs.find(x => x.pathname === br.dataset.breply); openComposer({ to: b.email, subject: 'Your project with Vibeo', body: `Hi ${b.name.split(/\s+/)[0]},\n\nThanks for telling us about your project. ` }); return; }
+    const bd = e.target.closest('[data-bdel]');
+    if (bd){
+      if (bd.dataset.confirm !== '1'){ bd.dataset.confirm = '1'; bd.textContent = 'Click again to delete'; setTimeout(() => { bd.dataset.confirm = ''; bd.textContent = 'Delete'; }, 3000); return; }
+      try { await api('/api/submissions?pathname=' + encodeURIComponent(bd.dataset.bdel), { method:'DELETE' }); briefs = briefs.filter(b => b.pathname !== bd.dataset.bdel); toast('Brief deleted'); render(); } catch (ex) { handle(ex); }
+    }
+  });
+  $('main').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('.row')) e.target.click(); });
+
+  async function download(pathname, name){
+    try {
+      const r = await fetch('/api/attachment?pathname=' + encodeURIComponent(pathname), { headers:{ Authorization:'Bearer ' + pw } });
+      if (!r.ok) throw new Error('Could not download the attachment.');
+      const a = document.createElement('a'); a.href = URL.createObjectURL(await r.blob()); a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    } catch (ex) { toast(ex.message); }
+  }
+
+  function exportCsv(){
+    const cols = ['createdAt','name','email','phone','company','website','services','budget','timeline','about','source'];
+    const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
+    const csv = [cols.join(','), ...briefs.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `vibeo-briefs-${new Date().toISOString().slice(0,10)}.csv`; a.click();
+  }
+
+  /* Compose window */
+  function openComposer({ to = '', subject = '', body = '' } = {}){
+    const c = $('composer'); c.hidden = false; c.classList.remove('min');
+    $('cTo').value = to; $('cSubj').value = subject; $('cBody').value = body; $('cErr').textContent = '';
+    $('cTitle').textContent = subject || 'New Message';
+    (to ? $('cBody') : $('cTo')).focus();
+  }
+  $('composeBtn').addEventListener('click', () => openComposer());
+  $('cClose').addEventListener('click', e => { e.stopPropagation(); $('composer').hidden = true; });
+  $('cMin').addEventListener('click', e => { e.stopPropagation(); $('composer').classList.toggle('min'); });
+  $('cHead').addEventListener('click', () => $('composer').classList.toggle('min'));
+  $('cSubj').addEventListener('input', () => $('cTitle').textContent = $('cSubj').value || 'New Message');
+  $('cSend').addEventListener('click', async () => {
+    const btn = $('cSend'); btn.disabled = true; $('cErr').textContent = '';
+    try { await send({ to: $('cTo').value, subject: $('cSubj').value, text: $('cBody').value }); $('composer').hidden = true; }
+    catch (ex) { if (ex.status === 401) return handle(ex); $('cErr').textContent = ex.message; }
+    finally { btn.disabled = false; }
+  });
+
+  /* Auth */
+  function handle(ex){ if (ex.status === 401){ showLogin('Your password changed. Sign in again.'); } else toast(ex.message); }
+  function showApp(){ $('login').hidden = true; $('app').hidden = false; }
+  function showLogin(msg){ $('app').hidden = true; $('composer').hidden = true; $('login').hidden = false; $('loginErr').textContent = msg || ''; $('pw').focus(); }
 
   $('loginForm').addEventListener('submit', async e => {
-    e.preventDefault();
-    pw = $('pw').value; $('loginErr').textContent = ''; $('loginBtn').disabled = true;
-    try { await load(); try { sessionStorage.setItem(KEY, pw); } catch {} showApp(); }
+    e.preventDefault(); pw = $('pw').value; $('loginErr').textContent = ''; $('loginBtn').disabled = true;
+    try { await loadAll(); try { sessionStorage.setItem(KEY, pw); } catch {} showApp(); }
     catch (ex) { showLogin(ex.message); }
     finally { $('loginBtn').disabled = false; }
   });
-
-  $('q').addEventListener('input', render);
-  $('refresh').addEventListener('click', () => load().catch(ex => alertBox(ex)));
   $('logout').addEventListener('click', () => { try { sessionStorage.removeItem(KEY); } catch {} pw = ''; $('pw').value = ''; showLogin(); });
 
-  $('list').addEventListener('click', async e => {
-    const b = e.target.closest('[data-del]'); if (!b) return;
-    if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = 'Click again to delete'; setTimeout(() => { b.dataset.confirm = ''; b.textContent = 'Delete'; }, 3000); return; }
-    b.disabled = true;
-    const r = await fetch('/api/submissions?pathname=' + encodeURIComponent(b.dataset.del), { method:'DELETE', headers:{ Authorization:'Bearer ' + pw } });
-    if (r.ok) { items = items.filter(i => i.pathname !== b.dataset.del); render(); } else { b.disabled = false; b.textContent = 'Delete failed'; }
-  });
+  // Check for new mail every minute while the tab is open
+  setInterval(() => { if (pw && !$('app').hidden && !document.hidden && !openThread) api('/api/mail').then(m => { const before = mail.length; mail = m.items || []; canSend = m.canSend !== false; if (mail.length > before) toast('New mail'); render(); }).catch(() => {}); }, 60000);
 
-  $('csv').addEventListener('click', () => {
-    const cols = ['createdAt','name','email','phone','company','website','services','budget','timeline','about','source'];
-    const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
-    const csv = [cols.join(','), ...items.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
-    a.download = `vibeo-briefs-${new Date().toISOString().slice(0,10)}.csv`;
-    a.click(); URL.revokeObjectURL(a.href);
-  });
-
-  function alertBox(ex){ if (ex.status === 401) showLogin('Password changed. Sign in again.'); else $('updated').textContent = ex.message; }
-
-  if (pw) load().then(showApp).catch(ex => showLogin(ex.status === 401 ? '' : ex.message)); else $('pw').focus();
+  if (pw) loadAll().then(showApp).catch(ex => showLogin(ex.status === 401 ? '' : ex.message)); else $('pw').focus();
 })();
 </script>
 </body>

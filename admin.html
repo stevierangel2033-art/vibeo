@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin | Vibeo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Cpath d='M14 16h10l8 22 8-22h10L37 50H27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap" rel="stylesheet">
+<style>
+:root{--muted:#767676;--line:#e4e4e4;--pad:clamp(16px,3vw,48px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:#000;font-family:'Archivo',system-ui,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid #2b50ff;outline-offset:3px}
+.disp{font-stretch:125%;font-weight:900;letter-spacing:-.03em;line-height:.95}
+.serif{font-family:'Newsreader',Georgia,serif}
+
+.login{min-height:100svh;display:grid;place-items:center;padding:var(--pad)}
+.login form{width:min(420px,100%)}
+.login h1{font-size:clamp(44px,8vw,72px)}
+.login p{color:var(--muted);margin:10px 0 28px}
+.login input{width:100%;font:inherit;font-size:20px;border:0;border-bottom:1.5px solid #000;padding:10px 0;outline:none;border-radius:0}
+.login input:focus{border-color:#2b50ff}
+.btn{display:inline-flex;align-items:center;gap:10px;background:#000;color:#fff;border:0;border-radius:999px;padding:13px 22px;font-weight:600;font-size:15px}
+.btn.ghost{background:transparent;color:#000;border:1.5px solid #000}
+.login .btn{margin-top:24px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.err{color:#d1003f;font-size:14px;margin-top:14px;min-height:1.2em}
+
+.app{display:none}
+.app.show{display:block}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:16px var(--pad);display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;justify-content:space-between}
+header .logo{font-stretch:125%;font-weight:900;font-size:20px;letter-spacing:-.03em;text-decoration:none}
+header .logo span{font-weight:400;font-stretch:100%;color:var(--muted);font-size:15px;margin-left:8px;letter-spacing:0}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tools input{font:inherit;border:1.5px solid #000;border-radius:999px;padding:10px 16px;width:min(260px,60vw);outline:none}
+.tools input:focus{border-color:#2b50ff}
+
+main{padding:28px var(--pad) 80px;max-width:1200px}
+.summary{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+.summary h1{font-size:clamp(36px,5vw,56px)}
+.summary span{color:var(--muted)}
+.empty{padding:60px 0;color:var(--muted);font-size:18px}
+
+.item{border-top:1.5px solid #000;padding:22px 0 26px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:18px 40px}
+@media (max-width:760px){.item{grid-template-columns:1fr}}
+.who h2{font-size:24px;font-weight:700;line-height:1.2}
+.who .meta{color:var(--muted);font-size:14px;margin-top:4px}
+.who a.mail{display:inline-block;margin-top:10px;font-weight:500;border-bottom:1px solid #000;text-decoration:none;word-break:break-all}
+.who .acts{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.who .acts .btn{padding:9px 16px;font-size:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.tag{border:1.5px solid #000;border-radius:999px;padding:4px 12px;font-size:13px;font-weight:500}
+.tag.solid{background:#000;color:#fff}
+.about{font-family:'Newsreader',Georgia,serif;font-size:19px;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin-top:14px;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{word-break:break-word}
+.new{display:inline-block;width:8px;height:8px;border-radius:50%;background:conic-gradient(#2b50ff,#ff2d87,#ffd200,#00d2b4,#2b50ff);margin-right:8px;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<section class="login" id="login">
+  <form id="loginForm">
+    <h1 class="disp">Vibeo admin</h1>
+    <p class="serif">Enter the admin password to see project briefs.</p>
+    <label for="pw" class="sr">Password</label>
+    <input id="pw" type="password" autocomplete="current-password" placeholder="Password" required>
+    <button class="btn" type="submit" id="loginBtn">Open submissions</button>
+    <p class="err" id="loginErr" role="alert"></p>
+  </form>
+</section>
+
+<section class="app" id="app">
+  <header>
+    <a class="logo" href="/">Vibeo<span>Admin</span></a>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search briefs" aria-label="Search briefs">
+      <button class="btn ghost" id="refresh">Refresh</button>
+      <button class="btn ghost" id="csv">Export CSV</button>
+      <button class="btn" id="logout">Sign out</button>
+    </div>
+  </header>
+  <main>
+    <div class="summary"><h1 class="disp" id="count">0 briefs</h1><span id="updated"></span></div>
+    <div id="list"></div>
+  </main>
+</section>
+
+<script>
+(() => {
+  const KEY = 'vibeo_admin_pw';
+  let pw = '';
+  try { pw = sessionStorage.getItem(KEY) || ''; } catch {}
+  let items = [];
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const when = iso => { const d = new Date(iso); return d.toLocaleString(undefined, {month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit'}); };
+
+  async function load(){
+    const r = await fetch('/api/submissions', { headers: { Authorization: 'Bearer ' + pw }, cache: 'no-store' });
+    const out = await r.json().catch(() => ({}));
+    if (!r.ok) throw Object.assign(new Error(out.error || 'Could not load submissions.'), { status: r.status });
+    items = out.items || [];
+    $('updated').textContent = 'Updated ' + new Date().toLocaleTimeString(undefined, {hour:'numeric', minute:'2-digit'});
+    render();
+  }
+
+  function render(){
+    const q = $('q').value.trim().toLowerCase();
+    const shown = q ? items.filter(i => JSON.stringify(i).toLowerCase().includes(q)) : items;
+    $('count').textContent = `${shown.length} brief${shown.length === 1 ? '' : 's'}`;
+    const dayAgo = Date.now() - 864e5;
+    $('list').innerHTML = shown.length ? shown.map(i => `
+      <article class="item">
+        <div class="who">
+          <h2>${new Date(i.createdAt) > dayAgo ? '<span class="new" title="New in the last 24 hours"></span>' : ''}${esc(i.name)}</h2>
+          <div class="meta">${esc(i.company || 'No company given')}<br>${when(i.createdAt)}</div>
+          <a class="mail" href="mailto:${esc(i.email)}?subject=${encodeURIComponent('Your project with Vibeo')}">${esc(i.email)}</a>
+          <div class="acts"><button class="btn ghost" data-del="${esc(i.pathname)}">Delete</button></div>
+        </div>
+        <div>
+          <div class="tags">
+            ${(i.services || []).map(s => `<span class="tag solid">${esc(s)}</span>`).join('')}
+            ${i.budget ? `<span class="tag">${esc(i.budget)}</span>` : ''}
+            ${i.timeline ? `<span class="tag">${esc(i.timeline)}</span>` : ''}
+          </div>
+          <p class="about">${esc(i.about)}</p>
+          <dl class="kv">
+            ${i.website ? `<dt>Website</dt><dd><a href="${esc(/^https?:/i.test(i.website) ? i.website : 'https://' + i.website)}" target="_blank" rel="noopener noreferrer">${esc(i.website)}</a></dd>` : ''}
+            ${i.source ? `<dt>Heard from</dt><dd>${esc(i.source)}</dd>` : ''}
+          </dl>
+        </div>
+      </article>`).join('') : `<p class="empty serif">${q ? 'No briefs match that search.' : 'No briefs yet. They will show up here as soon as someone sends the form on /start.'}</p>`;
+  }
+
+  function showApp(){ $('login').style.display = 'none'; $('app').classList.add('show'); }
+  function showLogin(msg){ $('app').classList.remove('show'); $('login').style.display = ''; $('loginErr').textContent = msg || ''; $('pw').focus(); }
+
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    pw = $('pw').value; $('loginErr').textContent = ''; $('loginBtn').disabled = true;
+    try { await load(); try { sessionStorage.setItem(KEY, pw); } catch {} showApp(); }
+    catch (ex) { showLogin(ex.message); }
+    finally { $('loginBtn').disabled = false; }
+  });
+
+  $('q').addEventListener('input', render);
+  $('refresh').addEventListener('click', () => load().catch(ex => alertBox(ex)));
+  $('logout').addEventListener('click', () => { try { sessionStorage.removeItem(KEY); } catch {} pw = ''; $('pw').value = ''; showLogin(); });
+
+  $('list').addEventListener('click', async e => {
+    const b = e.target.closest('[data-del]'); if (!b) return;
+    if (b.dataset.confirm !== '1') { b.dataset.confirm = '1'; b.textContent = 'Click again to delete'; setTimeout(() => { b.dataset.confirm = ''; b.textContent = 'Delete'; }, 3000); return; }
+    b.disabled = true;
+    const r = await fetch('/api/submissions?pathname=' + encodeURIComponent(b.dataset.del), { method:'DELETE', headers:{ Authorization:'Bearer ' + pw } });
+    if (r.ok) { items = items.filter(i => i.pathname !== b.dataset.del); render(); } else { b.disabled = false; b.textContent = 'Delete failed'; }
+  });
+
+  $('csv').addEventListener('click', () => {
+    const cols = ['createdAt','name','email','company','website','services','budget','timeline','about','source'];
+    const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
+    const csv = [cols.join(','), ...items.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'}));
+    a.download = `vibeo-briefs-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click(); URL.revokeObjectURL(a.href);
+  });
+
+  function alertBox(ex){ if (ex.status === 401) showLogin('Password changed. Sign in again.'); else $('updated').textContent = ex.message; }
+
+  if (pw) load().then(showApp).catch(ex => showLogin(ex.status === 401 ? '' : ex.message)); else $('pw').focus();
+})();
+</script>
+</body>
+</html>

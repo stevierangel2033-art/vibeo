@@ -396,7 +396,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       <article class="brief">
         <div>
           <h3>${esc(i.name)}</h3>
-          <div class="m">${esc(i.company || 'No company given')}<br>${long(i.createdAt)}</div>
+          <div class="m">${esc(i.company || 'No company given')}${i.city || i.country ? `<br>${esc([i.city, i.country].filter(Boolean).join(', '))}` : ''}<br>${long(i.createdAt)}</div>
           <div class="m" style="margin-top:8px"><a href="mailto:${esc(i.email)}">${esc(i.email)}</a>${i.phone ? `<br><a href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}</div>
           <div class="acts">
             <button class="outline" data-breply="${esc(i.pathname)}">${ic('reply',18)}Reply</button>
@@ -501,7 +501,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
   }
 
   function exportCsv(){
-    const cols = ['createdAt','name','email','phone','company','website','services','budget','timeline','about','source'];
+    const cols = ['createdAt','name','email','phone','company','city','country','website','services','budget','timeline','about','source'];
     const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
     const csv = [cols.join(','), ...briefs.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `vibeo-briefs-${new Date().toISOString().slice(0,10)}.csv`; a.click();

@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 import { randomUUID } from 'node:crypto';
 
-const LIMITS = { name: 120, email: 200, phone: 40, company: 160, website: 300, budget: 60, timeline: 60, about: 5000, source: 200 };
+const LIMITS = { name: 120, email: 200, phone: 40, company: 160, city: 120, country: 120, website: 300, budget: 60, timeline: 60, about: 5000, source: 200 };
 const SERVICES = ['Landing page', 'Brand website', 'Online store', 'Web app', 'Redesign', 'Not sure yet'];
 
 const json = (body, status = 200) =>
@@ -23,6 +23,11 @@ export async function POST(request) {
   if (!entry.name) return json({ error: 'Add your name.' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(entry.email)) return json({ error: 'Add a valid email address.' }, 400);
   if ((entry.phone.match(/\d/g) || []).length < 7) return json({ error: 'Add a phone number we can reach you on.' }, 400);
+  if (!entry.city) return json({ error: 'Add your city, so we can book a call at a good time for you.' }, 400);
+  if (!entry.country) return json({ error: 'Add your country.' }, 400);
+  if (!entry.services.length) return json({ error: 'Pick what you need.' }, 400);
+  if (!entry.budget) return json({ error: 'Pick a budget.' }, 400);
+  if (!entry.timeline) return json({ error: 'Pick when you want to launch.' }, 400);
   if (entry.about.length < 10) return json({ error: 'Tell us a little more about the project.' }, 400);
 
   const id = randomUUID();

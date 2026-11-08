@@ -95,9 +95,13 @@ input:focus,textarea:focus{border-color:#2b50ff}
       <div><label class="lbl" for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(310) 555 0142" required></div>
       <div><label class="lbl" for="company">Company or brand <small>optional</small></label><input id="company" name="company" type="text" autocomplete="organization" placeholder="Rivera Studio"></div>
     </div>
+    <div class="row">
+      <div><label class="lbl" for="city">City</label><input id="city" name="city" type="text" autocomplete="address-level2" placeholder="Los Angeles" required></div>
+      <div><label class="lbl" for="country">Country</label><input id="country" name="country" type="text" autocomplete="country-name" placeholder="United States" required></div>
+    </div>
 
     <fieldset>
-      <legend>What do you need? <small>pick any</small></legend>
+      <legend>What do you need? <small>pick at least one</small></legend>
       <div class="chips">
         <label class="chip"><input type="checkbox" name="services" value="Landing page"><span>Landing page</span></label>
         <label class="chip"><input type="checkbox" name="services" value="Brand website"><span>Brand website</span></label>
@@ -111,7 +115,7 @@ input:focus,textarea:focus{border-color:#2b50ff}
     <fieldset>
       <legend>Budget</legend>
       <div class="chips">
-        <label class="chip"><input type="radio" name="budget" value="Under $2k"><span>Under $2k</span></label>
+        <label class="chip"><input type="radio" name="budget" value="Under $2k" required><span>Under $2k</span></label>
         <label class="chip"><input type="radio" name="budget" value="$2k to $5k"><span>$2k to $5k</span></label>
         <label class="chip"><input type="radio" name="budget" value="$5k to $10k"><span>$5k to $10k</span></label>
         <label class="chip"><input type="radio" name="budget" value="$10k to $25k"><span>$10k to $25k</span></label>
@@ -122,7 +126,7 @@ input:focus,textarea:focus{border-color:#2b50ff}
     <fieldset>
       <legend>When do you want to launch?</legend>
       <div class="chips">
-        <label class="chip"><input type="radio" name="timeline" value="As soon as possible"><span>As soon as possible</span></label>
+        <label class="chip"><input type="radio" name="timeline" value="As soon as possible" required><span>As soon as possible</span></label>
         <label class="chip"><input type="radio" name="timeline" value="Within a month"><span>Within a month</span></label>
         <label class="chip"><input type="radio" name="timeline" value="1 to 3 months"><span>1 to 3 months</span></label>
         <label class="chip"><input type="radio" name="timeline" value="Just exploring"><span>Just exploring</span></label>
@@ -200,6 +204,12 @@ input:focus,textarea:focus{border-color:#2b50ff}
     if (!data.name.trim()) { err.textContent = 'Add your name.'; form.name.focus(); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) { err.textContent = 'Add a valid email address.'; form.email.focus(); return; }
     if ((data.phone.match(/\d/g) || []).length < 7) { err.textContent = 'Add a phone number we can reach you on.'; form.phone.focus(); return; }
+    if (!data.city.trim()) { err.textContent = 'Add your city, so we can book a call at a good time for you.'; form.city.focus(); return; }
+    if (!data.country.trim()) { err.textContent = 'Add your country.'; form.country.focus(); return; }
+    const pick = (name, msg) => { err.textContent = msg; const el = form.querySelector('input[name="' + name + '"]'); el.closest('fieldset').scrollIntoView({ behavior: 'smooth', block: 'center' }); el.focus({ preventScroll: true }); };
+    if (!data.services.length) return pick('services', 'Pick what you need.');
+    if (!data.budget) return pick('budget', 'Pick a budget.');
+    if (!data.timeline) return pick('timeline', 'Pick when you want to launch.');
     if (data.about.trim().length < 10) { err.textContent = 'Tell us a little more about the project.'; form.about.focus(); return; }
 
     btn.disabled = true; btn.classList.add('busy'); sendText.textContent = 'Sending';

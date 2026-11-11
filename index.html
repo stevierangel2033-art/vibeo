@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vibeo | Build websites that make people say wow</title>
-<meta name="description" content="The step by step guide behind the sites on our feed. Design, launch and sell with a website people remember. No code needed. $22, instant PDF download.">
+<meta name="description" content="The step by step guide behind the sites on our feed. Design, launch and sell with a website people remember. No code needed. Instant PDF download.">
 <meta property="og:title" content="Build websites that make people say wow">
-<meta property="og:description" content="The step by step guide behind the sites on our feed. No code needed. $22, instant PDF download.">
+<meta property="og:description" content="The step by step guide behind the sites on our feed. No code needed. Instant PDF download.">
 <meta property="og:url" content="https://vibeo.ink">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://vibeo.ink/img/cover.webp">
@@ -162,13 +162,12 @@ footer a{border-bottom:1px solid #555}
       <p class="lede-sub">The exact process behind the sites on our feed, in one 17 page guide. Design it, launch it on your own domain, and start selling. No code needed.</p>
     </div>
     <form class="buy" id="buy" novalidate>
-      <div class="price"><b>$22</b><span>Instant PDF download</span></div>
       <div class="row">
         <input name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name" required>
         <input name="email" type="email" autocomplete="email" placeholder="Email" aria-label="Email" required>
       </div>
       <div class="hp" aria-hidden="true"><input type="text" name="website_url" tabindex="-1" autocomplete="off"></div>
-      <button class="btn mag" type="submit"><span class="dot"></span><span class="label">Get the guide for $22</span></button>
+      <button class="btn mag" type="submit"><span class="dot"></span><span class="label">Get the guide</span></button>
       <p class="err" role="alert"></p>
       <p class="fine">Secure checkout with Stripe. We email you the download link too.</p>
     </form>
@@ -208,7 +207,7 @@ footer a{border-bottom:1px solid #555}
     <div><dt>Do I need to know how to code?</dt><dd>No. You describe the site, the AI writes it, and every other step happens in a browser with buttons and forms.</dd></div>
     <div><dt>What do I get?</dt><dd>A 17 page PDF you download straight after paying. We also email you the link so you can grab it again later.</dd></div>
     <div><dt>Which tools does it use?</dt><dd>Claude, GitHub, Vercel and a domain registrar to go live. Stripe and SendGrid when you want payments and email.</dd></div>
-    <div><dt>Will it cost me more than $22?</dt><dd>You can launch on free plans. The only must have cost is a domain, usually a few dollars to about $20 a year.</dd></div>
+    <div><dt>Do the tools cost money?</dt><dd>You can launch on free plans. The only must have cost is a domain, usually a few dollars to about $20 a year.</dd></div>
   </dl>
 </section>
 
@@ -216,13 +215,12 @@ footer a{border-bottom:1px solid #555}
   <div class="final-grid">
     <p class="q">Your next website could be the one people screenshot.</p>
     <form class="buy" id="buy2" novalidate>
-      <div class="price"><b>$22</b><span>Instant PDF download</span></div>
       <div class="row">
         <input name="name" type="text" autocomplete="name" placeholder="Your name" aria-label="Your name" required>
         <input name="email" type="email" autocomplete="email" placeholder="Email" aria-label="Email" required>
       </div>
       <div class="hp" aria-hidden="true"><input type="text" name="website_url" tabindex="-1" autocomplete="off"></div>
-      <button class="btn light mag" type="submit"><span class="dot"></span><span class="label">Get the guide for $22</span></button>
+      <button class="btn light mag" type="submit"><span class="dot"></span><span class="label">Get the guide</span></button>
       <p class="err" role="alert"></p>
       <p class="fine">Secure checkout with Stripe.</p>
     </form>
@@ -354,7 +352,7 @@ footer a{border-bottom:1px solid #555}
         if (!r.ok || !out.url) throw new Error(out.error || 'Checkout did not open. Please try again.');
         location.href = out.url;
       } catch (ex) {
-        err.textContent = ex.message; btn.disabled = false; btn.classList.remove('busy'); label.textContent = 'Get the guide for $22';
+        err.textContent = ex.message; btn.disabled = false; btn.classList.remove('busy'); label.textContent = 'Get the guide';
       }
     });
   });

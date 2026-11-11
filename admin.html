@@ -117,6 +117,15 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
 .reply-box .ft{display:flex;align-items:center;gap:12px;margin-top:8px}
 .reply-box .ft .err{margin:0}
 
+/* Shop tables */
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-weight:500;color:var(--muted);font-size:12px;padding:12px 16px;border-bottom:1px solid #f1f3f4}
+.tbl td{padding:10px 16px;border-bottom:1px solid #f1f3f4;vertical-align:middle}
+.tbl td a{color:var(--blue);text-decoration:none}
+.tbl tr:hover td{background:#f6f8fc}
+.outline.sm{padding:5px 14px 5px 10px;font-size:13px;gap:6px}
+.pill input{display:none}
+@media (max-width:760px){.tbl th:nth-child(4),.tbl td:nth-child(4),.tbl th:nth-child(5),.tbl td:nth-child(5){display:none}.tbl td,.tbl th{padding:10px 8px}}
 /* Briefs */
 .briefs{padding:8px 24px 48px}
 .brief{display:grid;grid-template-columns:260px 1fr;gap:16px 32px;padding:20px 0;border-bottom:1px solid #f1f3f4}
@@ -174,7 +183,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
   <form id="loginForm">
     <div class="brand">Vibeo</div>
     <h1>Sign in to Vibeo Mail</h1>
-    <p>Enter the admin password to open the inbox and project briefs.</p>
+    <p>Enter the admin password to open the inbox, leads and sales.</p>
     <input id="pw" type="password" autocomplete="current-password" placeholder="Password" aria-label="Password" required>
     <p class="err" id="loginErr" role="alert"></p>
     <div class="lrow"><button class="pill" type="submit" id="loginBtn">Next</button></div>
@@ -203,7 +212,9 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       <a data-f="sent"><svg class="i" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>Sent</a>
       <a data-f="trash"><svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>Trash</a>
       <div class="lbl">Website</div>
-      <a data-f="briefs"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Project briefs<span class="n" id="nBriefs"></span></a>
+      <a data-f="sales"><svg class="i" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Sales<span class="n" id="nSales"></span></a>
+      <a data-f="leads"><svg class="i" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Leads<span class="n" id="nLeads"></span></a>
+      <a data-f="product"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Guide PDF</a>
     </nav>
   </aside>
 
@@ -230,7 +241,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
 (() => {
   const KEY = 'vibeo_admin_pw';
   let pw = ''; try { pw = sessionStorage.getItem(KEY) || ''; } catch {}
-  let mail = [], briefs = [], canSend = true, folder = 'inbox', openThread = null;
+  let mail = [], briefs = [], store = { leads:[], sales:[], product:null, canSell:false }, canSend = true, folder = 'inbox', openThread = null;
   const $ = id => document.getElementById(id);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const ICON = {
@@ -292,7 +303,8 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
   function counts(){
     const unread = threads().filter(t => t.msgs.some(m => m.folder === 'inbox' && !m.read)).length;
     $('nInbox').textContent = unread || '';
-    $('nBriefs').textContent = briefs.length || '';
+    $('nLeads').textContent = store.leads.length || '';
+    $('nSales').textContent = store.sales.length || '';
     document.title = unread ? `Inbox (${unread}) | Vibeo Mail` : 'Vibeo Mail';
   }
 
@@ -306,7 +318,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
 
   function render(){
     counts();
-    if (folder === 'briefs') return renderBriefs();
+    if (folder === 'leads' || folder === 'sales' || folder === 'product') return renderShop();
     if (openThread) return renderThread();
     const q = $('q').value.trim().toLowerCase();
     let list = threads().filter(t => inFolder(t, folder));
@@ -396,7 +408,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       <article class="brief">
         <div>
           <h3>${esc(i.name)}</h3>
-          <div class="m">${esc(i.company || 'No company given')}${i.city || i.country ? `<br>${esc([i.city, i.country].filter(Boolean).join(', '))}` : ''}<br>${long(i.createdAt)}</div>
+          <div class="m">${esc(i.company || 'No company given')}<br>${long(i.createdAt)}</div>
           <div class="m" style="margin-top:8px"><a href="mailto:${esc(i.email)}">${esc(i.email)}</a>${i.phone ? `<br><a href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}</div>
           <div class="acts">
             <button class="outline" data-breply="${esc(i.pathname)}">${ic('reply',18)}Reply</button>
@@ -411,10 +423,33 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       </article>`).join('')}</div>`;
   }
 
+  function renderShop(){
+    const q = $('q').value.trim().toLowerCase();
+    const money = (n, c) => (n / 100).toLocaleString(undefined, { style:'currency', currency:(c || 'usd').toUpperCase() });
+    const banner = !store.canSell ? '<div class="banner">Checkout is off until STRIPE_SECRET_KEY is added in Vercel. Visitors who click Buy see a message to try again soon.</div>' : '';
+    const dl = '<svg class="i" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>';
+    if (folder === 'product'){
+      $('toolbar').innerHTML = `<button class="icon-btn" data-act="refresh" title="Refresh">${ic('refresh')}</button><span class="meta"></span>`;
+      const p = store.product;
+      $('main').innerHTML = banner + `<div class="briefs"><article class="brief"><div><h3>The guide buyers download</h3><div class="m">${p ? `${size(p.size)}, updated ${long(p.uploadedAt)}` : 'No PDF uploaded yet. Buyers can pay but cannot download until you add one.'}</div></div>
+        <div><p class="about">Upload a new PDF here to replace the guide. New buyers, and anyone using an earlier download link, get the new version straight away.</p>
+        <div class="acts"><label class="pill" style="cursor:pointer">Upload new PDF<input type="file" id="pdfIn" accept="application/pdf" hidden></label><span class="err" id="upErr"></span></div></div></article></div>`;
+      return;
+    }
+    const rows = (folder === 'sales' ? store.sales : store.leads).filter(r => !q || JSON.stringify(r).toLowerCase().includes(q));
+    const paid = new Set(store.sales.map(s => s.sessionId));
+    $('toolbar').innerHTML = `<button class="icon-btn" data-act="refresh" title="Refresh">${ic('refresh')}</button><button class="icon-btn" data-act="shopcsv" title="Export CSV">${dl}</button><span class="meta">${rows.length} ${folder === 'sales' ? 'sale' : 'lead'}${rows.length === 1 ? '' : 's'}${folder === 'sales' && rows.length ? ', ' + money(rows.filter(r => r.livemode !== false).reduce((a, r) => a + (r.amount || 0), 0), 'usd') + ' total' : ''}</span>`;
+    if (!rows.length){ $('main').innerHTML = banner + `<div class="empty"><b>${q ? 'Nothing matches your search' : folder === 'sales' ? 'No sales yet' : 'No leads yet'}</b>${q ? '' : folder === 'sales' ? 'Every paid order shows up here.' : 'Everyone who enters their name and email to buy shows up here, paid or not.'}</div>`; return; }
+    $('main').innerHTML = banner + `<table class="tbl"><thead><tr><th>Name</th><th>Email</th>${folder === 'sales' ? '<th>Amount</th><th>Emailed</th>' : '<th>Status</th>'}<th>Date</th><th></th></tr></thead><tbody>${rows.map(r => `<tr>
+      <td>${esc(r.name || 'No name')}</td><td><a href="mailto:${esc(r.email)}">${esc(r.email)}</a></td>
+      ${folder === 'sales' ? `<td>${money(r.amount || 0, r.currency)}${r.livemode === false ? ' <span class="tag">test</span>' : ''}</td><td>${r.emailed ? 'Yes' : 'No'}</td>` : `<td>${paid.has(r.sessionId) ? '<span class="chip dark">Paid</span>' : '<span class="chip">Did not pay</span>'}</td>`}
+      <td>${short(r.createdAt)}</td><td><button class="outline sm" data-lmail="${esc(r.email)}" data-lname="${esc(r.name || '')}">${ic('reply',16)}Email</button></td></tr>`).join('')}</tbody></table>`;
+  }
+
   /* Data */
   async function loadAll(){
-    const [m, b] = await Promise.all([api('/api/mail'), api('/api/submissions')]);
-    mail = m.items || []; canSend = m.canSend !== false; briefs = b.items || [];
+    const [m, st] = await Promise.all([api('/api/mail'), api('/api/store')]);
+    mail = m.items || []; canSend = m.canSend !== false; store = st;
     render();
   }
 
@@ -454,6 +489,13 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
           await api('/api/mail', { method:'DELETE', body: JSON.stringify({ pathnames: msgs.map(m => m.pathname) }) });
           mail = mail.filter(m => !msgs.includes(m)); openThread = null; toast('Deleted forever'); render(); break;
         case 'csv': exportCsv(); break;
+        case 'shopcsv': {
+          const rows = folder === 'sales' ? store.sales : store.leads;
+          const cols = folder === 'sales' ? ['createdAt','name','email','amount','currency','emailed','livemode','sessionId'] : ['createdAt','name','email','sessionId'];
+          const cell = v => `"${String(v ?? '').replace(/"/g,'""')}"`;
+          const csv = [cols.join(','), ...rows.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
+          const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `vibeo-${folder}-${new Date().toISOString().slice(0,10)}.csv`; a.click(); break;
+        }
       }
     } catch (ex) { handle(ex); }
   });
@@ -482,6 +524,8 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       } catch (ex) { if (ex.status === 401) return handle(ex); $('rErr').textContent = ex.message; btn.disabled = false; }
       return;
     }
+    const lm = e.target.closest('[data-lmail]');
+    if (lm){ const first = (lm.dataset.lname || '').split(/\s+/)[0]; openComposer({ to: lm.dataset.lmail, subject: 'Your Vibeo guide', body: `Hi ${first || 'there'},\n\n` }); return; }
     const br = e.target.closest('[data-breply]');
     if (br){ const b = briefs.find(x => x.pathname === br.dataset.breply); openComposer({ to: b.email, subject: 'Your project with Vibeo', body: `Hi ${b.name.split(/\s+/)[0]},\n\nThanks for telling us about your project. ` }); return; }
     const bd = e.target.closest('[data-bdel]');
@@ -489,6 +533,16 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       if (bd.dataset.confirm !== '1'){ bd.dataset.confirm = '1'; bd.textContent = 'Click again to delete'; setTimeout(() => { bd.dataset.confirm = ''; bd.textContent = 'Delete'; }, 3000); return; }
       try { await api('/api/submissions?pathname=' + encodeURIComponent(bd.dataset.bdel), { method:'DELETE' }); briefs = briefs.filter(b => b.pathname !== bd.dataset.bdel); toast('Brief deleted'); render(); } catch (ex) { handle(ex); }
     }
+  });
+  $('main').addEventListener('change', async e => {
+    if (e.target.id !== 'pdfIn' || !e.target.files[0]) return;
+    const f = e.target.files[0]; $('upErr').textContent = 'Uploading...';
+    try {
+      const r = await fetch('/api/store', { method:'PUT', headers:{ Authorization:'Bearer ' + pw, 'Content-Type':'application/pdf' }, body: f });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok) throw Object.assign(new Error(out.error || 'Upload failed.'), { status:r.status });
+      store.product = out.product; toast('New PDF is live'); render();
+    } catch (ex) { if (ex.status === 401) return handle(ex); $('upErr').textContent = ex.message; }
   });
   $('main').addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('.row')) e.target.click(); });
 
@@ -501,7 +555,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
   }
 
   function exportCsv(){
-    const cols = ['createdAt','name','email','phone','company','city','country','website','services','budget','timeline','about','source'];
+    const cols = ['createdAt','name','email','phone','company','website','services','budget','timeline','about','source'];
     const cell = v => `"${String(Array.isArray(v) ? v.join('; ') : v ?? '').replace(/"/g,'""')}"`;
     const csv = [cols.join(','), ...briefs.map(i => cols.map(c => cell(i[c])).join(','))].join('\n');
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv'})); a.download = `vibeo-briefs-${new Date().toISOString().slice(0,10)}.csv`; a.click();

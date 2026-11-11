@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Your guide | Vibeo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Cpath d='M14 16h10l8 22 8-22h10L37 50H27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap" rel="stylesheet">
+<style>
+:root{--pad:clamp(16px,4vw,64px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;color:#000;font-family:'Newsreader',Georgia,serif;font-size:clamp(17px,1.2vw,20px);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100svh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #000;outline-offset:4px;border-radius:4px}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px var(--pad)}
+.nav .logo{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;font-size:22px;letter-spacing:-.03em}
+main{flex:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(32px,6vw,100px);align-items:center;padding:clamp(24px,6vh,80px) var(--pad) clamp(48px,10vh,120px)}
+@media (max-width:860px){main{grid-template-columns:1fr}}
+.ink-head{position:relative;isolation:isolate;background:#fff;touch-action:pan-y}
+h1{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;letter-spacing:-.035em;line-height:.9;font-size:clamp(56px,9vw,150px);padding:.04em 0}
+.ink-head canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.msg{margin-top:24px;font-size:clamp(20px,1.6vw,26px);max-width:34ch}
+.small{margin-top:16px;font-family:'Archivo',sans-serif;font-size:14px;color:#767676;max-width:44ch}
+.small a{color:#000;border-bottom:1px solid #000}
+.btn{display:inline-flex;align-items:center;gap:12px;background:#000;color:#fff;font-family:'Archivo',sans-serif;font-weight:600;font-size:17px;padding:18px 30px;border-radius:999px;border:0;cursor:pointer;position:relative;overflow:hidden;isolation:isolate;margin-top:32px}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:conic-gradient(from var(--a,0deg),#2b50ff,#ff2d87,#ffd200,#00d2b4,#2b50ff);opacity:0;transition:opacity .4s}
+.btn:hover::before{opacity:1;animation:spin 2.4s linear infinite}
+.btn .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+figure{border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px #000;max-width:420px;width:100%;justify-self:center;transform:rotate(2deg)}
+figure img{display:block;width:100%;height:auto}
+@media (max-width:860px){figure{max-width:280px}}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main"><a class="logo" href="/">Vibeo</a></nav>
+<main>
+  <div>
+    <div class="ink-head"><h1 id="title">One moment.</h1><canvas aria-hidden="true"></canvas></div>
+    <p class="msg" id="msg">Checking your payment with Stripe.</p>
+    <a class="btn" id="dl" hidden><span class="dot"></span>Download the PDF</a>
+    <p class="small" id="note" hidden>We also emailed the link to <b id="mail"></b>. Keep that email to download it again later. Questions? <a href="mailto:hello@vibeo.ink">hello@vibeo.ink</a></p>
+  </div>
+  <figure><img src="/img/cover.webp" alt="Guide cover: Build websites that make people say wow" width="900" height="1165"></figure>
+</main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const sid = new URLSearchParams(location.search).get('session_id') || '';
+  (async () => {
+    try {
+      const r = await fetch('/api/download?session_id=' + encodeURIComponent(sid), { cache:'no-store' });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(out.error || 'We could not confirm this payment.');
+      const first = (out.name || '').trim().split(/\s+/)[0];
+      $('title').textContent = first ? `Thank you, ${first}.` : 'Thank you.';
+      $('msg').textContent = 'Your guide is ready. Download it now and start building.';
+      $('dl').href = '/api/download?file=1&session_id=' + encodeURIComponent(sid);
+      $('dl').hidden = false;
+      if (out.email){ $('mail').textContent = out.email; $('note').hidden = false; }
+    } catch (ex) {
+      $('title').textContent = 'Hmm.';
+      $('msg').innerHTML = '';
+      $('msg').append(ex.message + ' If you were charged, email ', Object.assign(document.createElement('a'), { href:'mailto:hello@vibeo.ink', textContent:'hello@vibeo.ink', style:'border-bottom:1px solid #000' }), ' and we will sort it out.');
+    }
+  })();
+
+  // Ink through the heading
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const wrap = document.querySelector('.ink-head'), c = wrap.querySelector('canvas'), x = c.getContext('2d');
+  let w, h, hue = 200, t = 0, drops = [];
+  const size = () => { const r = wrap.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); w = r.width; h = r.height; c.width = w * d; c.height = h * d; x.setTransform(d,0,0,d,0,0); };
+  size(); addEventListener('resize', size); new ResizeObserver(size).observe(wrap);
+  let last = performance.now();
+  (function loop(now){
+    const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt; hue = (hue + dt * 30) % 360;
+    x.globalCompositeOperation = 'destination-out'; x.fillStyle = 'rgba(0,0,0,.05)'; x.fillRect(0,0,w,h); x.globalCompositeOperation = 'source-over';
+    for (let i = 0; i < 3; i++){ const tt = t * (.4 + i * .15) + i * 2; if (Math.random() < .6) drops.push({ x: w * (.5 + .47 * Math.sin(tt * 1.1 + i)), y: h * (.5 + .4 * Math.sin(tt * 1.7 + i)), r: 0, max: h * (.35 + Math.random() * .2), life: 1, s: i * 120 }); }
+    if (drops.length > 200) drops.splice(0, drops.length - 200);
+    for (let i = drops.length - 1; i >= 0; i--){ const d = drops[i]; d.r += (d.max - d.r) * .08; d.life -= dt * .55; if (d.life <= 0){ drops.splice(i, 1); continue; }
+      const g = x.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r), H = (hue + d.s) % 360;
+      g.addColorStop(0, `hsla(${H},100%,56%,${.8 * d.life})`); g.addColorStop(.55, `hsla(${(H + 30) % 360},100%,56%,${.4 * d.life})`); g.addColorStop(1, `hsla(${(H + 60) % 360},100%,56%,0)`);
+      x.fillStyle = g; x.beginPath(); x.arc(d.x, d.y, d.r, 0, Math.PI * 2); x.fill(); }
+    requestAnimationFrame(loop);
+  })(last);
+})();
+</script>
+</body>
+</html>

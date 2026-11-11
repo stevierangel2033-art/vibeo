@@ -1,8 +1,11 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/start", "destination": "/#buy", "permanent": false }
+  ],
   "headers": [
     {
-      "source": "/admin",
+      "source": "/(admin|thanks)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
         { "key": "Cache-Control", "value": "no-store" }

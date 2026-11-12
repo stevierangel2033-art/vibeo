@@ -6,15 +6,17 @@ import { readJson, listAll, productBlob } from './_shop.js';
 export async function GET(request) {
   const denied = guard(request);
   if (denied) return denied;
-  const [leadBlobs, saleBlobs, product] = await Promise.all([listAll('leads/'), listAll('sales/'), productBlob()]);
-  const [leads, sales] = await Promise.all([
+  const [leadBlobs, saleBlobs, hireBlobs, product] = await Promise.all([listAll('leads/'), listAll('sales/'), listAll('hires/'), productBlob()]);
+  const [leads, sales, hires] = await Promise.all([
     Promise.all(leadBlobs.map(b => readJson(b.pathname))),
     Promise.all(saleBlobs.map(b => readJson(b.pathname))),
+    Promise.all(hireBlobs.map(async b => { const r = await readJson(b.pathname); return r && { ...r, pathname: b.pathname }; })),
   ]);
   const byDate = (a, b) => (a.createdAt < b.createdAt ? 1 : -1);
   return json({
     leads: leads.filter(Boolean).sort(byDate),
     sales: sales.filter(Boolean).sort(byDate),
+    hires: hires.filter(Boolean).sort(byDate),
     product: product ? { pathname: product.pathname, size: product.size, uploadedAt: product.uploadedAt } : null,
     canSell: !!process.env.STRIPE_SECRET_KEY,
   });

@@ -31,6 +31,10 @@ h1{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;letter-spa
 .btn .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
 @property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
 @keyframes spin{to{--a:360deg}}
+.hire{margin-top:36px;padding-top:24px;border-top:1.5px solid #000;max-width:44ch;display:flex;flex-direction:column;gap:6px}
+.hire b{font-family:'Archivo',sans-serif;font-weight:700;font-size:clamp(18px,1.4vw,22px)}
+.hire span{color:#555}
+.btn.ghost{background:#fff;color:#000;border:1.5px solid #000;margin-top:14px;align-self:flex-start;padding:14px 24px;font-size:16px}
 figure{border-radius:6px;overflow:hidden;box-shadow:0 0 0 1px #000;max-width:420px;width:100%;justify-self:center;transform:rotate(2deg)}
 figure img{display:block;width:100%;height:auto}
 @media (max-width:860px){figure{max-width:280px}}
@@ -45,6 +49,7 @@ figure img{display:block;width:100%;height:auto}
     <div class="ink-head"><h1 id="title">One moment.</h1><canvas aria-hidden="true"></canvas></div>
     <p class="msg" id="msg">Checking your payment with Stripe.</p>
     <a class="btn" id="dl" hidden><span class="dot"></span>Download the PDF</a>
+    <div class="hire" id="hire" hidden><b>Stuck, or want us to build it?</b><span>Hire us by the hour to get unstuck on any website, or for a full project.</span><a class="btn ghost" id="hireLink" href="/hire"><span class="dot"></span>Hire us</a></div>
     <p class="small" id="note" hidden>We also emailed the link to <b id="mail"></b>. Keep that email to download it again later. Questions? <a href="mailto:hello@vibeo.ink">hello@vibeo.ink</a></p>
   </div>
   <figure><img src="/img/cover.webp" alt="Guide cover: Build websites that make people say wow" width="900" height="1165"></figure>
@@ -64,6 +69,7 @@ figure img{display:block;width:100%;height:auto}
       $('dl').href = '/api/download?file=1&session_id=' + encodeURIComponent(sid);
       $('dl').hidden = false;
       if (out.email){ $('mail').textContent = out.email; $('note').hidden = false; }
+      $('hireLink').href = '/hire?session_id=' + encodeURIComponent(sid); $('hire').hidden = false;
     } catch (ex) {
       $('title').textContent = 'Hmm.';
       $('msg').innerHTML = '';

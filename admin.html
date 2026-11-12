@@ -213,6 +213,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       <a data-f="trash"><svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>Trash</a>
       <div class="lbl">Website</div>
       <a data-f="sales"><svg class="i" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>Sales<span class="n" id="nSales"></span></a>
+      <a data-f="hires"><svg class="i" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-2 .89-2 2v11c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>Hire requests<span class="n" id="nHires"></span></a>
       <a data-f="leads"><svg class="i" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Leads<span class="n" id="nLeads"></span></a>
       <a data-f="product"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>Guide PDF</a>
     </nav>
@@ -305,6 +306,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
     $('nInbox').textContent = unread || '';
     $('nLeads').textContent = store.leads.length || '';
     $('nSales').textContent = store.sales.length || '';
+    $('nHires').textContent = (store.hires || []).length || '';
     document.title = unread ? `Inbox (${unread}) | Vibeo Mail` : 'Vibeo Mail';
   }
 
@@ -318,6 +320,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
 
   function render(){
     counts();
+    if (folder === 'hires') return renderHires();
     if (folder === 'leads' || folder === 'sales' || folder === 'product') return renderShop();
     if (openThread) return renderThread();
     const q = $('q').value.trim().toLowerCase();
@@ -419,6 +422,28 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
           <div class="chips">${(i.services || []).map(s => `<span class="chip dark">${esc(s)}</span>`).join('')}${i.budget ? `<span class="chip">${esc(i.budget)}</span>` : ''}${i.timeline ? `<span class="chip">${esc(i.timeline)}</span>` : ''}</div>
           <p class="about">${esc(i.about)}</p>
           <dl>${i.website ? `<dt>Website</dt><dd><a href="${esc(/^https?:/i.test(i.website) ? i.website : 'https://' + i.website)}" target="_blank" rel="noopener noreferrer">${esc(i.website)}</a></dd>` : ''}${i.source ? `<dt>Heard from</dt><dd>${esc(i.source)}</dd>` : ''}</dl>
+        </div>
+      </article>`).join('')}</div>`;
+  }
+
+  function renderHires(){
+    const q = $('q').value.trim().toLowerCase();
+    const list = (store.hires || []).filter(r => !q || JSON.stringify(r).toLowerCase().includes(q));
+    const paid = new Set(store.sales.map(s => s.sessionId));
+    $('toolbar').innerHTML = `<button class="icon-btn" data-act="refresh" title="Refresh">${ic('refresh')}</button><span class="meta">${list.length} request${list.length === 1 ? '' : 's'}</span>`;
+    if (!list.length){ $('main').innerHTML = `<div class="empty"><b>${q ? 'Nothing matches your search' : 'No hire requests yet'}</b>${q ? '' : 'Buyers who want hourly help or a full project show up here.'}</div>`; return; }
+    $('main').innerHTML = `<div class="briefs">${list.map(i => `
+      <article class="brief">
+        <div>
+          <h3>${esc(i.name)}</h3>
+          <div class="m">${long(i.createdAt)}</div>
+          <div class="m" style="margin-top:8px"><a href="mailto:${esc(i.email)}">${esc(i.email)}</a>${i.phone ? `<br><a href="tel:${esc(i.phone.replace(/[^\d+]/g,''))}">${esc(i.phone)}</a>` : ''}</div>
+          <div class="acts"><button class="outline" data-lmail="${esc(i.email)}" data-lname="${esc(i.name)}" data-lsubj="${esc(i.type === 'Full project' ? 'Your project with Vibeo' : 'Getting you unstuck')}">${ic('reply',18)}Reply</button></div>
+        </div>
+        <div>
+          <div class="chips"><span class="chip dark">${esc(i.type)}</span>${paid.has(i.sessionId) ? '<span class="chip">Bought the guide</span>' : ''}</div>
+          <p class="about">${esc(i.message)}</p>
+          ${i.website ? `<dl><dt>Website</dt><dd><a href="${esc(/^https?:/i.test(i.website) ? i.website : 'https://' + i.website)}" target="_blank" rel="noopener noreferrer">${esc(i.website)}</a></dd></dl>` : ''}
         </div>
       </article>`).join('')}</div>`;
   }
@@ -525,7 +550,7 @@ svg.i{width:20px;height:20px;fill:currentColor;flex:none}
       return;
     }
     const lm = e.target.closest('[data-lmail]');
-    if (lm){ const first = (lm.dataset.lname || '').split(/\s+/)[0]; openComposer({ to: lm.dataset.lmail, subject: 'Your Vibeo guide', body: `Hi ${first || 'there'},\n\n` }); return; }
+    if (lm){ const first = (lm.dataset.lname || '').split(/\s+/)[0]; openComposer({ to: lm.dataset.lmail, subject: lm.dataset.lsubj || 'Your Vibeo guide', body: `Hi ${first || 'there'},\n\n` }); return; }
     const br = e.target.closest('[data-breply]');
     if (br){ const b = briefs.find(x => x.pathname === br.dataset.breply); openComposer({ to: b.email, subject: 'Your project with Vibeo', body: `Hi ${b.name.split(/\s+/)[0]},\n\nThanks for telling us about your project. ` }); return; }
     const bd = e.target.closest('[data-bdel]');

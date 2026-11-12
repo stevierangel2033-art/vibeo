@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Hire us | Vibeo</title>
+<meta name="description" content="Stuck on your website, or want us to build it? Hire Vibeo by the hour or by the project.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23000'/%3E%3Cpath d='M14 16h10l8 22 8-22h10L37 50H27z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Newsreader:opsz,wght@6..72,300..600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fff;--ink:#000;--muted:#767676;--line:#e2e2e2;--pad:clamp(16px,4vw,64px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Newsreader',Georgia,serif;font-size:clamp(17px,1.2vw,20px);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #000;outline-offset:4px;border-radius:4px}
+.disp{font-family:'Archivo',system-ui,sans-serif;font-stretch:125%;font-weight:900;letter-spacing:-.03em;line-height:.92}
+.sans{font-family:'Archivo',system-ui,sans-serif}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:18px var(--pad)}
+.nav .logo{font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;font-size:22px;letter-spacing:-.03em}
+.nav .back{font-family:'Archivo',sans-serif;font-size:15px;font-weight:500;border-bottom:1px solid currentColor}
+
+.wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,110px);padding:clamp(32px,7vh,90px) var(--pad) clamp(60px,10vh,120px);max-width:1500px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.intro{position:sticky;top:32px;align-self:start}
+@media (max-width:900px){.intro{position:static}}
+.ink-head{position:relative;isolation:isolate;background:#fff;cursor:crosshair;touch-action:pan-y}
+.ink-head h1{font-size:clamp(52px,7.4vw,124px);padding:.04em 0}
+.ink-head canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.intro p{margin-top:24px;max-width:34ch;color:#333}
+.intro .note{margin-top:28px;font-family:'Archivo',sans-serif;font-size:15px;color:var(--muted);max-width:36ch}
+.intro .note a{color:#000;border-bottom:1px solid #000}
+
+form{display:flex;flex-direction:column;gap:clamp(30px,4vw,46px)}
+fieldset{border:0;min-width:0}
+legend,.lbl{display:block;font-family:'Archivo',sans-serif;font-weight:600;font-size:clamp(17px,1.25vw,20px);margin-bottom:14px}
+.lbl small,legend small{font-weight:400;color:var(--muted);margin-left:6px;font-size:.85em}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:620px){.cards{grid-template-columns:1fr}}
+.card{position:relative;display:block;cursor:pointer}
+.card input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.card .box{display:block;height:100%;border:1.5px solid #000;border-radius:16px;padding:18px 20px;transition:background .25s,color .25s,transform .25s}
+.card .box b{display:block;font-family:'Archivo',sans-serif;font-stretch:125%;font-weight:900;font-size:clamp(22px,2vw,28px);letter-spacing:-.02em;margin-bottom:6px}
+.card .box span{font-size:16px;color:#555;transition:color .25s}
+.card input:checked+.box{background:#000;color:#fff}
+.card input:checked+.box span{color:#cfcfcf}
+.card input:focus-visible+.box{outline:2px solid #2b50ff;outline-offset:3px}
+.card:hover .box{transform:translateY(-2px)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,3vw,40px)}
+@media (max-width:620px){.row{grid-template-columns:1fr}}
+input[type=text],input[type=email],input[type=tel],input[type=url],textarea{width:100%;border:0;border-bottom:1.5px solid #000;background:transparent;font:inherit;font-size:clamp(20px,1.6vw,26px);padding:8px 0 10px;color:#000;border-radius:0;outline:none;transition:border-color .2s}
+textarea{resize:vertical;min-height:150px;line-height:1.4;border:1.5px solid #000;padding:14px 16px;border-radius:14px;font-size:clamp(18px,1.3vw,21px)}
+input::placeholder,textarea::placeholder{color:#b3b3b3}
+input:focus,textarea:focus{border-color:#2b50ff}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.chip span{display:inline-block;font-family:'Archivo',sans-serif;font-weight:500;font-size:16px;padding:11px 18px;border:1.5px solid #000;border-radius:999px;transition:background .25s,color .25s,transform .25s;user-select:none}
+.chip input:checked+span{background:#000;color:#fff}
+.chip input:focus-visible+span{outline:2px solid #2b50ff;outline-offset:3px}
+.chip:hover span{transform:translateY(-2px)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.submit-row{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px}
+.btn{display:inline-flex;align-items:center;gap:12px;background:#000;color:#fff;font-family:'Archivo',sans-serif;font-weight:600;font-size:17px;padding:18px 30px;border-radius:999px;border:0;cursor:pointer;position:relative;overflow:hidden;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;background:conic-gradient(from var(--a,0deg),#2b50ff,#ff2d87,#ffd200,#00d2b4,#2b50ff);opacity:0;transition:opacity .4s}
+.btn:hover::before,.btn.busy::before{opacity:1;animation:spin 2.4s linear infinite}
+.btn .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.btn[disabled]{cursor:progress}
+@property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes spin{to{--a:360deg}}
+.err{font-family:'Archivo',sans-serif;font-size:15px;color:#d1003f;min-height:1.2em}
+.fine{font-family:'Archivo',sans-serif;font-size:14px;color:var(--muted)}
+
+.done{display:none;padding:clamp(40px,10vh,120px) var(--pad);min-height:70vh}
+.done.show{display:block}
+.done .ink-head h1{font-size:clamp(56px,11vw,190px)}
+.done p{margin-top:28px;max-width:40ch;font-size:clamp(20px,1.6vw,26px)}
+.done .btn{margin-top:36px}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <a class="logo" href="/">Vibeo</a>
+  <a class="back" href="/">Back to home</a>
+</nav>
+
+<main>
+<div class="wrap" id="formView">
+  <div class="intro">
+    <div class="ink-head"><h1 class="disp">Hire us</h1><canvas aria-hidden="true"></canvas></div>
+    <p>Stuck on a scene, an animation or a launch step? Or want us to build the whole site for you? Tell us what you are working on and we will reply with a time or a quote.</p>
+    <p class="note">Prefer email? Write to <a href="mailto:hello@vibeo.ink">hello@vibeo.ink</a>.</p>
+  </div>
+
+  <form id="hire" novalidate>
+    <fieldset>
+      <legend>How can we help?</legend>
+      <div class="cards">
+        <label class="card"><input type="radio" name="type" value="Hourly help" checked><span class="box"><b>Hourly help</b><span>A call or a working session to get you unstuck on any website.</span></span></label>
+        <label class="card"><input type="radio" name="type" value="Full project"><span class="box"><b>Full project</b><span>We design and build your scroll journey site, start to launch.</span></span></label>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <div><label class="lbl" for="name">Your name</label><input id="name" name="name" type="text" autocomplete="name" placeholder="Alex Rivera" required></div>
+      <div><label class="lbl" for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="alex@company.com" required></div>
+    </div>
+    <div class="row">
+      <div><label class="lbl" for="phone">Phone <small>optional</small></label><input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(310) 555 0142"></div>
+      <div><label class="lbl" for="website">Your website <small>optional</small></label><input id="website" name="website" type="text" inputmode="url" placeholder="yoursite.com"></div>
+    </div>
+
+    <div>
+      <label class="lbl" for="message">What are you working on?</label>
+      <textarea id="message" name="message" placeholder="What the site is for, where you are stuck or what you want built, and any links that help." required></textarea>
+    </div>
+
+    <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="company_url" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="submit-row">
+      <button class="btn" type="submit" id="send"><span class="dot"></span><span id="sendText">Send request</span></button>
+      <span class="fine">We reply within one business day.</span>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+  </form>
+</div>
+
+<section class="done" id="doneView" aria-live="polite">
+  <div class="ink-head"><h1 class="disp" id="thanks">Got it.</h1><canvas aria-hidden="true"></canvas></div>
+  <p>Your request is with us. We will read it properly and reply to your inbox within one business day.</p>
+  <a class="btn" href="/"><span class="dot"></span>Back to home</a>
+</section>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* Ink through the heading, same engine as the home page */
+  function ink(wrap){
+    if (reduce) return;
+    const c = wrap.querySelector('canvas'), x = c.getContext('2d');
+    let w, h, hue = Math.random()*360, t = 0, drops = [], p = {x:0,y:0,px:0,py:0,on:false}, vis = true;
+    const size = () => { const r = wrap.getBoundingClientRect(), d = Math.min(devicePixelRatio||1,2); w=r.width; h=r.height; c.width=w*d; c.height=h*d; x.setTransform(d,0,0,d,0,0); };
+    size(); addEventListener('resize', size);
+    wrap.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); const nx=e.clientX-r.left, ny=e.clientY-r.top; if(!p.on){p.px=nx;p.py=ny;} p.x=nx;p.y=ny;p.on=true; });
+    wrap.addEventListener('pointerleave', () => p.on = false);
+    new IntersectionObserver(es => vis = es[0].isIntersecting).observe(wrap);
+    const add = (X,Y,vx,vy,r,s) => { drops.push({x:X,y:Y,vx,vy,r:r*.35,max:r,life:1,s}); if (drops.length>200) drops.shift(); };
+    let last = performance.now();
+    (function loop(now){
+      const dt = Math.min(.05,(now-last)/1000); last = now;
+      if (vis && wrap.offsetParent){
+        t += dt; hue = (hue + dt*30) % 360;
+        x.globalCompositeOperation='destination-out'; x.fillStyle='rgba(0,0,0,.05)'; x.fillRect(0,0,w,h); x.globalCompositeOperation='source-over';
+        for (let i=0;i<2;i++){ const tt=t*(.4+i*.15)+i*2; if (Math.random()<.6) add(w*(.5+.47*Math.sin(tt*1.1+i)), h*(.5+.4*Math.sin(tt*1.7+i)), 0,0, h*(.35+Math.random()*.2), i*140); }
+        if (p.on){ const dx=p.x-p.px, dy=p.y-p.py, d=Math.hypot(dx,dy), n=Math.min(6,1+Math.floor(d/14)); for(let i=0;i<n;i++) add(p.px+dx*i/n,p.py+dy*i/n,dx*.08,dy*.08,h*.3,60); p.px=p.x;p.py=p.y; }
+        for (let i=drops.length-1;i>=0;i--){ const d=drops[i]; d.x+=d.vx; d.y+=d.vy; d.vx*=.94; d.vy*=.94; d.r+=(d.max-d.r)*.08; d.life-=dt*.55; if(d.life<=0){drops.splice(i,1);continue;}
+          const g=x.createRadialGradient(d.x,d.y,0,d.x,d.y,d.r), H=(hue+d.s)%360;
+          g.addColorStop(0,`hsla(${H},100%,56%,${.8*d.life})`); g.addColorStop(.55,`hsla(${(H+30)%360},100%,56%,${.4*d.life})`); g.addColorStop(1,`hsla(${(H+60)%360},100%,56%,0)`);
+          x.fillStyle=g; x.beginPath(); x.arc(d.x,d.y,d.r,0,Math.PI*2); x.fill(); }
+      }
+      requestAnimationFrame(loop);
+    })(last);
+    return size;
+  }
+  document.querySelectorAll('.ink-head').forEach(ink);
+
+  const params = new URLSearchParams(location.search), sid = params.get('session_id') || '';
+  const form = document.getElementById('hire'), err = document.getElementById('err'), btn = document.getElementById('send'), sendText = document.getElementById('sendText');
+  if (params.get('type') === 'project') form.querySelector('input[value="Full project"]').checked = true;
+  if (sid) fetch('/api/download?session_id=' + encodeURIComponent(sid)).then(r => r.ok ? r.json() : null).then(d => { if (!d) return; if (d.name && !form.name.value) form.name.value = d.name; if (d.email && !form.email.value) form.email.value = d.email; }).catch(() => {});
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault(); err.textContent = '';
+    const data = Object.fromEntries(new FormData(form).entries());
+    data.sessionId = sid;
+    if (!data.name.trim()) { err.textContent = 'Add your name.'; form.name.focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) { err.textContent = 'Add a valid email address.'; form.email.focus(); return; }
+    if (data.message.trim().length < 10) { err.textContent = 'Tell us a little more about what you need.'; form.message.focus(); return; }
+    btn.disabled = true; btn.classList.add('busy'); sendText.textContent = 'Sending';
+    try {
+      const r = await fetch('/api/hire', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) });
+      const out = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(out.error || 'Something went wrong. Please email hello@vibeo.ink.');
+      const first = data.name.trim().split(/\s+/)[0];
+      document.getElementById('thanks').textContent = `Got it, ${first}.`;
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('doneView').classList.add('show');
+      scrollTo({top:0}); dispatchEvent(new Event('resize'));
+    } catch (ex) {
+      err.textContent = ex.message; btn.disabled = false; btn.classList.remove('busy'); sendText.textContent = 'Send request';
+    }
+  });
+})();
+</script>
+</body>
+</html>

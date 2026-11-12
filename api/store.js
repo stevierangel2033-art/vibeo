@@ -1,4 +1,4 @@
-import { put, del } from '@vercel/blob';
+import { put, del, get } from '@vercel/blob';
 import { guard, json } from './_mail.js';
 import { readJson, listAll, productBlob } from './_shop.js';
 
@@ -6,6 +6,13 @@ import { readJson, listAll, productBlob } from './_shop.js';
 export async function GET(request) {
   const denied = guard(request);
   if (denied) return denied;
+  if (new URL(request.url).searchParams.get('file') === '1') {
+    const blob = await productBlob();
+    if (!blob) return json({ error: 'No PDF uploaded yet.' }, 404);
+    const r = await get(blob.pathname, { access: 'private' });
+    if (r?.statusCode !== 200) return json({ error: 'The PDF could not be opened.' }, 500);
+    return new Response(r.stream, { headers: { 'Content-Type': 'application/pdf', 'Content-Disposition': 'inline; filename="vibeo-guide.pdf"', 'Cache-Control': 'private, no-store' } });
+  }
   const [leadBlobs, saleBlobs, hireBlobs, product] = await Promise.all([listAll('leads/'), listAll('sales/'), listAll('hires/'), productBlob()]);
   const [leads, sales, hires] = await Promise.all([
     Promise.all(leadBlobs.map(b => readJson(b.pathname))),
